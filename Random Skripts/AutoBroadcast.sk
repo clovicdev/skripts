@@ -1,0 +1,39 @@
+on load:
+	updateBroadcasts()
+
+every 5 minutes:
+	if {autobroadcast} is not false:
+		set {_size} to size of {broadcasts::*}
+		broadcastMessage({broadcasts::%{_size}%})
+		remove {broadcasts::%{_size}%} from {broadcasts::*}
+		if size of {broadcasts::*} is 0:
+			updateBroadcasts()
+
+command /bc <text>:
+	description: Main admin command for broadcasts.
+	permission: broadcast.admin
+	permission message: &cInsufficient permission.
+	usage: &c/bc <message/toggle>
+	aliases: /broadcast
+	trigger:
+		if arg-1 is "toggle":
+			if {autobroadcast} is not false:
+				set {autobroadcast} to false
+				send "&cAuto broadcast has been disabled."
+			else:
+				clear {autobroadcast}
+				send "&aAuto broadcast has been enabled."
+		else:
+			broadcastMessage(arg-1)
+
+function broadcastMessage(m: text):
+	broadcast ""
+	broadcast colored {_m}
+	broadcast ""
+
+function updateBroadcasts():
+	clear {broadcasts::*}
+	add "&bChange Broadcast Message here" to {broadcasts::*}
+	add "&bEdit the Broadcasts in this area" to {broadcasts::*}
+	add "&bCustomize Broadcast Message here" to {broadcasts::*}
+	add "&bUpdate the broadcasts here" to {broadcasts::*}

@@ -1,0 +1,76 @@
+on load:
+    set {backpack.price::1} to 100
+    set {backpack.price::2} to 500
+    set {backpack.price::3} to 1000
+    set {backpack.price::4} to 2500
+
+on join:
+    if {backpack::%player's uuid%::level} isn't set:
+        set {backpack::%player's uuid%::level} to 0
+function Pack_Open(p: player):
+    set {_u} to uuid of {_p}
+    set {_menu} to chest inventory with {backpack::%{_u}%::level} rows named "%{_p}%'s Backpack"
+    set {_slot} to 0
+    loop {backpack::%{_u}%::items::*}:
+        set slot {_slot} of {_menu} to loop-value
+        add 1 to {_slot}
+    delete {backpack::%{_u}%::items::*}
+    open {_menu} to {_p}
+    set {inventory::%{_u}%} to "backpack.items"
+
+function Pack_Main(p: player):
+    set {_u} to uuid of {_p}
+    set {_menu} to chest inventory with 3 rows named "Backpack"
+    set {_max} to {backpack::%{_u}%::level} + 1
+    if {backpack.price::%{_max}%} isn't set:
+        set {_upgrade} to "&cYou already reached the max backpack level"
+    else:
+        set {_price} to {backpack.price::%{_max}%}
+        set {_upgrade} to "&7Price: &c%{_price}%"
+    set slot 12 of {_menu} to gold block named "&e&lUpgrade" lored {_upgrade}
+    if {backpack::%{_u}%::level} is 0:
+        set {_open} to "&cYou need to upgrade your backpack to level 1"
+    else:
+        set {_open} to "&bItems %size of {backpack::%{_u}%::items::*}%/%{backpack::%{_u}%::level} * 9%"
+    set slot 14 of {_menu} to chest named "&a&lOpen Backpack" lored {_open}
+    open {_menu} to {_p}
+    set {inventory::%{_u}%} to "backpack.main"
+
+on rightclick on sign:
+    line 2 of clicked block is "[Backpack]" or "[backpack]"
+    Pack_Main(player)
+
+on inventory click:
+    if {inventory::%player's uuid%} is "backpack.main":
+        cancel event
+        if name of event-slot is "&e&lUpgrade":
+            set {_price} to uncolored line 1 of lore of event-slot
+            if {_price} contains "Price":
+                replace all "Price: " in {_price} with ""
+                set {_price} to {_price} parsed as integer
+                if player's balance >= {_price}:
+                    remove {_price} from player's balance
+                    add 1 to {backpack::%player's uuid%::level}
+                    close player's inventory
+                    send "&bYou backpack is now level %{backpack::%player's uuid%::level}%"
+                else:
+                    send "&cYou need &7%{_price}%$ &cto upgrade your backpack"
+        else if name of event-slot is "&a&lOpen Backpack":
+            if {backpack::%player's uuid%::level} isn't 0:
+                Pack_Open(player)
+            else:
+                close player's inventory
+                send "&cYou need to upgrade your backpack to level 1 in order to do that"
+
+
+on inventory close:
+    if {inventory::%player's uuid%} is "backpack.items":
+        set {_items} to 1
+        set {_slot} to 0
+        set {_times} to ({backpack::%player's uuid%::level} * 9) - 1
+        loop {_times} times:
+            if slot {_slot} of current inventory isn't air:
+                set {backpack::%player's uuid%::items::%{_items}%} to slot {_slot} of current inventory
+                add 1 to {_items}
+            add 1 to {_slot}
+    delete {inventory::%player's uuid%}

@@ -1,0 +1,37 @@
+on load:
+	blockedWords()
+
+on chat:
+	if {antiswear} is not false:
+		loop {blocked_words::*}:
+			if message contains loop-value:
+				cancel event
+				send "&cYour message has been blocked."
+				loop {notify::*}:
+					send "&c%player% &chas tried to say a swear word! &7Word: %loop-value%" to loop-index
+					send "&cFull Message: &7%message%" to loop-index
+
+command /anti <text>:
+	description: The main command for managing the antiswear.
+	permission: antiswear.admin
+	permission message: &cInsufficient permission.
+	usage: &c/anti <notify/toggle>
+	aliases: /as, /antiswear
+	trigger:
+		if arg-1 is "notify":
+			if {notify::%uuid of player%} is not set:
+				set {notify::%uuid of player%} to true
+				send "&aSwear notifications has been enabled."
+			else:
+				clear {notify::%uuid of player%}
+				send "&cSwear notifications has been disabled."
+		else if arg-1 is "toggle":
+			if {antiswear} is not false:
+				set {antiswear} to false
+				send "&cAntiswear has been disabled."
+			else:
+				clear {antiswear}
+				send "&aAntiswear has been enabled."
+
+function blockedWords():
+	set {blockedWords::*} to "nigger", "n1gger", "ngger", "niger", "n1ger", "n1ga", "n1gga", "nigga", "n*gga", "n*gger", "n*ggr", "nigga", "n1gga", "n1ggga", "niggga", "n1gggga", "nigggga", "n1ggaa", "niggaa", "n1ggaaa", "niggaaa", "n*ga",  "n*ger", "n1gr", "n*ggr", "nggr", "fuck", "fck", "f*ck", "fuc", "fuc*", "fvck", "fack", "fvk", "fak", "fvc", "idiot", "bitch", "btch", "b1tch", "bittch", "b1ttch", "b*tch", "b*ttch", "bitcch", "b1tcch", "pussy", "p*ssy", "p*sy", "pusy", "pssy", "pvssy", "pvsy", "pusssy", "pussssy", "pusssssy", "puusy", "puussy", "puuussy", "asshole", "*sshole", "osshole", "ashole", "asshle", "asohle", "oshle", "analhole", "annalhole", "assholle", "assho1e", "assho11e", "assh1e", "assholo", "asshola", "sashole", "asshule", "asshale", "asshlle", "shit", "sh1t", "sh*t", "shhit", "shiit", "sh11t", "shh1t", "shat", "shi*", "s*it", "shitt", "shittt", "shiit", "shiiit", "slut", "slutt", "slvt", "slvtt", "slut", "slvvt", "slt", "sltt", "sllut", "s1ut", "s11ut", "ass", "asss", "assss", "a*s", "motherfucker", "motherfcker", "motherfuckr", "motherfckr", "motherfukr", "motherfuker", "mutherfucker", "mutherfuckr", "mutherfukr", "mutherfckr", "mutherfkr", "motherficker", "motherfricker", "mutherficker", "mtherfucker", "mthrfucker", "mthrfcker", "mthrfker", "mthrfckr", "mthrfukr", "motherf*cker", "motherf*ker", "motherfu*ker", "cunt", "c*nt", "cnt", "cont", "cvnt", "cunnt", "cuntt", "cuunt", "ccunt", "cu*nt", "ccuunt", "cuunnt", "ccuunnt", "cunntt", "cunt", "thot", "anus", "an*s", "annus", "anuus", "anuss", "anas", "anass", "aanus", "a*us", "anuus", "anaus", "anauus", "anaaus", "anal", "an*l", "*nal", "a*al", "ana1", "an*1", "a*a1", "aval", "anul", "unal", "cock", "cck", "cvck", "cack", "c0ck", "cok", "c0k", "cocck", "cockk", "ccock", "dick", "d1ck", "d1k", "dik", "bick", "ddick", "diick", "diiick", "dickhead", "dickhed", "dckhead", "dckhad", "dikhad", "dkhad", "dkhead", "dikhead", "dckhead", "faggot", "f4ggot", "f*ggot", "fagg0t", "f4gggot", "fagggot", "fag", "fagg", "f4g", "f4gg", "f*g", "faag", "whore", "wh0re", "whre", "whor", "whorre", "whoree", "whhore", "w*ore", "who*e", and "whore"

@@ -1,0 +1,168 @@
+options:
+    storage: quest
+    prefix: &c&lQuests »
+    nbt: quest
+    
+on load:
+    Quest_Reload()
+    Quest_Register(1, "Lumberjack ", "break", "Collect 10.wood", 16 oak planks named "&bProtection Block")
+    Quest_Register(2, "Butcher", "kill", "Kill 16.pigs", stone sword)
+    Quest_Register(3, "Assassin", "kill", "Kill 1.player", (2 glowstone dust, 2 spider eyes and 10 cobblestone))
+    Quest_Register(4, "Novice Miner", "break", "Collect 32.cobblestone", (8 cobblestone, 3 gunpowder and 12 coal))
+    Quest_Register(5, "Butcher ##2", "kill", "Kill 32.pigs", (1 iron sword, 4 gunpowder, 16 stone and 2 emeralds))
+
+function Quest_Reload():
+    clear {{@storage}::*}
+
+function Quest_Register(id: integer, name: string, type: text, objective: text, rewards: items):
+    set {{@storage}::%{_id}%::name} to {_name}
+    set {{@storage}::%{_id}%::type} to {_type}
+    set {{@storage}::%{_id}%::objective} to {_objective}
+    set {{@storage}::%{_id}%::rewards::*} to {_rewards::*}
+
+on break:
+    set {_id} to {player::%uuid of player%::quest::id} ? 1
+    {player::%uuid of player%::quest::progress} ? 0 < 100
+    if {{@storage}::%{_id}%::type} is "break":
+        set {_obj} to {{@storage}::%{_id}%::objective}
+        replace all "Collect " in {_obj} with ""
+        set {_temp::*} to {_obj} split at "."
+        set {_amount} to {_temp::1} parsed as integer
+        if {_temp::2} isn't "wood":
+            set {_item} to {_temp::2} parsed as item type
+            if event-block isn't {_item}:
+                stop
+        else if "%event-block%" doesn't contain "wood":
+            stop
+        # broadcast {_obj}
+        # broadcast "Item: %{_item}%, Amount: %{_amount}%"
+        # if "%event-block%" parsed as item type) is {_item}:
+        add 1 to {player::%uuid of player%::quest::amount}
+        # broadcast "(%{player::%uuid of player%::quest::amount}% / %{_amount}%) * 100"
+        if {player::%uuid of player%::quest::amount} >= {_amount}:
+            set {player::%uuid of player%::quest::progress} to 100
+            send player title "&dQuest %{_id}% Completed!" with subtitle "&fCollect the rewards in /quests" for 2 seconds with 1 second fade in and 1 second fade out
+        else:
+            set {player::%uuid of player%::quest::progress} to ({player::%uuid of player%::quest::amount} / {_amount}) * 100
+
+on death:
+    attacker is a player
+    set {_id} to {player::%uuid of attacker%::quest::id} ? 1
+    {player::%uuid of attacker%::quest::progress} ? 0 < 100
+    if {{@storage}::%{_id}%::type} is "kill":
+        set {_obj} to {{@storage}::%{_id}%::objective}
+        replace all "Kill " in {_obj} with ""
+        set {_temp::*} to {_obj} split at "."
+        set {_amount} to {_temp::1} parsed as integer
+        set {_entity} to {_temp::2} parsed as entity type
+        # broadcast {_obj}
+        # broadcast "Entity: %{_entity}%, Amount: %{_amount}%"
+        if victim is {_entity}:
+            add 1 to {player::%uuid of attacker%::quest::amount}
+            # broadcast "(%{player::%uuid of attacker%::quest::amount}% / %{_amount}%) * 100"
+            if {player::%uuid of attacker%::quest::amount} >= {_amount}:
+                set {player::%uuid of attacker%::quest::progress} to 100
+                send attacker title "&dQuest %{_id}% Completed!" with subtitle "&fCollect the rewards in /quests" for 2 seconds with 1 second fade in and 1 second fade out
+            else:
+                set {player::%uuid of attacker%::quest::progress} to ({player::%uuid of attacker%::quest::amount} / {_amount}) * 100
+
+function Quest_Complete(p: player, id: integer):
+    set {_u} to uuid of {_p}
+    loop all items in {_p}'s inventory:
+        add 1 to {_num}
+    if {_num} + size of {{@storage}::%{_id}%::rewards::*} >= 36:
+        send "{@prefix} &cYou don't have enough space in your inventory" to {_p}
+    else:
+        if {player::%{_u}%::quest::id} is set:
+            add 1 to {player::%{_u}%::quest::id}
+        else:
+            add 2 to {player::%{_u}%::quest::id}
+        delete {player::%{_u}%::quest::progress}
+        delete {player::%{_u}%::quest::amount}
+        make {_p} execute command "/quests"
+        loop {{@storage}::%{_id}%::rewards::*}:
+            give loop-value to {_p}
+        send "{@prefix} &bAll rewards for the quest %{{@storage}::%{_id}%::name}% recieved" to {_p}
+#     Quest_Track({_p})
+
+
+# function Quest_Track(p: player, id: string = "none"):
+#     set {_u} to uuid of {_p}
+#     set {player::%{_u}%::quest.main} to {_id}
+#     if {_id} isn't "none":
+#         set {_temp::*} to {{@storage}::%{_id}%::objective} split at " "
+#         set {_need} to {_temp::2} parsed as integer
+#         create bossbar title "&6&lTracking Quest: &7%{{@storage}::%{_id}%::objective}%" and id "%{_p}%'s quest" for {_p} with progress {player::%{_u}%::quest.progress::%{_id}%}/{_need} * 100 with colors blue
+#         set slot 7 of {_p} to compass named "&e&lQuests &6(Tracking)"
+#         set {_p}'s compass target to location of {region::%{{@storage}::%{_id}%::region}%::location}
+#     else:
+#         set slot 7 of {_p} to enchanted book named "&e&lQuests"
+#         hide bossbar "%{_p}%'s quest"
+#     close {_p}'s inventory
+
+command /quests [<text = "open">] [<offline player = %player%>]:
+    trigger:
+        set {_u} to uuid of arg-2
+        if arg-1 is "open":
+            set {_menu} to chest inventory with 6 rows named "Quests"
+            set {_slot} to 9
+            loop all indices of {{@storage}::*}:
+                set {_id} to loop-value parsed as integer
+                if {player::%{_u}%::quest::id} ? 1 is {_id}:
+                    if {player::%{_u}%::quest::progress} is 100:
+                        set {_item} to glowing orange dye
+                        set {_addition} to "&bClick to Claim Rewards"
+                    else:
+                        set {_item} to orange dye
+                        set {_addition} to "&eQuest in Progress"
+                    set {_color} to "&6&l"
+                    set {_progress} to "||&7Progress: &b%{player::%{_u}%::quest::progress} ? 0%%%"
+                else if {player::%{_u}%::quest::id} ? 1 >= {_id}:
+                    set {_item} to light green dye
+                    set {_addition} to "&aQuest Completed"
+                    set {_color} to "&a&l"
+                    set {_progress} to ""
+                else:
+                    set {_item} to gray dye
+                    set {_addition} to "&cQuest Locked"
+                    set {_color} to "&c&l"
+                    set {_progress} to ""
+                set {_obj} to {{@storage}::%{_id}%::objective}
+                replace all "." in {_obj} with " "
+                set {_num} to 1
+                set {_rewards} to "%{{@storage}::%{_id}%::rewards::*}%"
+                set {_quest} to {_item} named "%{_color}%%{{@storage}::%{_id}%::name}%" lored "&7Objective: &8%{_obj}%%{_progress}%||&7Reward: &d%{_rewards}%||%{_addition}%"
+                add "{{@nbt}:%{_id}%}" to {_quest}'s nbt
+                set slot {_slot} of {_menu} to {_quest}
+                add 1 to {_slot}
+            set slot (integers from 0 to 8) of {_menu} to black glass pane named "&7"
+            set slot (45, 46, 47, 48, 50, 51, 52 and 53) of {_menu} to black glass pane named "&7"
+            set slot 49 of {_menu} to red glass pane named "&c&lClose"
+            open {_menu} to arg-2
+            set {player::%{_u}%::inventory} to "quests.main"
+        else if arg-1 is "clear":
+            delete {player::%{_u}%::quest::id}
+            delete {player::%{_u}%::quest::progress}
+            delete {player::%{_u}%::quest::amount}
+
+on inventory click:
+    if {player::%uuid of player%::inventory} contains "quests":
+        cancel event
+        if {player::%uuid of player%::inventory} is "quests.main":
+            if name of event-slot is "&c&lClose":
+                close player's inventory
+            else if event-slot is orange dye:
+                set {_id} to tag "{@nbt}" of event-slot's nbt
+                # broadcast "%{_id}%"
+                if {player::%uuid of player%::quest::progress} >= 100:
+                    Quest_Complete(player, "%{_id}%" parsed as integer)
+
+on inventory close:
+    delete {player::%uuid of player%::inventory}
+
+
+
+
+
+# on join:
+    # Quest_Track(player, {player::%uuid of player%::quest.main})

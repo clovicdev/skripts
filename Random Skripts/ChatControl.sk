@@ -1,0 +1,37 @@
+options:
+	staffPerm: chatcontrol.use
+
+on chat:
+	if {mute.chat} is true:
+		if player does not have the permission "{@staffPerm}":
+			cancel event
+			message "&cYou can not talk while the chat is muted."
+
+command /chat <text>:
+	description: Command used for anything chat-related.
+	permission: {@staffPerm}
+	permission message: &cInsufficient permission.
+	usage: &c/chat <clear/lock>
+	aliases: /c
+	trigger:
+		if arg-1 is "clear":
+			clearChat(player)
+		else if arg-1 is "lock" or "mute":
+			muteChat(player)
+		else:
+			execute player command "chat"
+
+function clearChat(p: player):
+	loop 600 times:
+		send " " to all players
+	broadcast "&7Chat has been cleared by &3%{_p}%&7."
+
+function muteChat(p: player):
+	if {chatmute} is not set:
+		set {chatmute} to true
+		set {_u} to "&c&llocked"
+	else:
+		clear {chatmute}
+		set {_u} to "&a&lunlocked"
+	broadcast "&7The chat has been %{_u}%&7."
+	send "&8[&cSTAFF&8] &3%{_p}% &7has %{_u}% &7the chat." to all players where [input has permission "{@staffPerm}"]

@@ -1,0 +1,23 @@
+every 2 minutes:
+    set {randombc} to a random integer from 1 to 6
+    if {randombc} = 1:
+        broadcast ""
+        broadcast "&6Be sure to join our Discord"
+        broadcast "&f&nYour Discord Server Link"
+        broadcast ""
+    if {randombc} = 2:
+        broadcast ""
+        broadcast "&6Be sure to follow our twitter"
+        broadcast "&f&nYour Server's Twitter account"
+        broadcast ""
+    if {randombc} = 3:
+        broadcast ""
+        broadcast "&6Enjoying the server? Help us keep it up by buying a rank:"
+        broadcast "&f&nYour Server Store"
+        broadcast ""
+    if {randombc} = 4:
+        broadcast "&7[&6&lTIP&7] &6Extra Text here"
+    if {randombc} = 5:
+        broadcast "&7[&6&lTIP&7] &6Extra Text here"
+    if {randombc} = 6:
+        broadcast "&7[&6&lTIP&7] &6Extra Text here"

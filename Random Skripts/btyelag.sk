@@ -1,0 +1,92 @@
+#bytelag is a replica of clear lag but coded in Skript
+
+#Created by Btyeware
+
+
+#--------------#          
+options:
+	Prefix: &6[&cClear Lag&6]
+	PrefixWarning: &6 [&cClear Lag&6]
+
+	# Alert Messages #
+
+	Warning: &f&lWarning&f, &6ground items will be removed in
+
+every 8 minutes:
+	broadcast "{@Warning} &f&l1 &6minute!"
+	wait 57 seconds
+	broadcast "{@Warning} &f&l3 &6seconds!"
+	wait 1 seconds
+	broadcast "{@Warning} &f&l2 &6seconds!"
+	wait 1 seconds
+	broadcast "{@Warning} &f&l1 &6second!"
+	wait 1 seconds
+	make server execute command "/clear1 lag"
+
+command /clearlag [<text>] [<integer>]:
+	trigger:
+		if arg-1 is not set:
+			message "&3-----------(&b&lClearlag Options&3)-----------"
+			message "&4- &8/&3clearlag &bclear &f- (Clears entities from your worlds)"
+			message "&4- &8/&3clearlag &barea &f- (Clears entities from your radius)"
+			message "&4- &8/&3clearlag &bkillmobs &f- (Clears mobs from your worlds)"
+			message "&3-------------------------------------------"
+
+		if player has permission "clear.lag":
+			if arg 1 is "clear":
+				clear {_count}
+				loop all arrows:
+					clear loop-entity
+					add 1 to {_count}
+				loop entities:
+					loop-entity is a dropped item
+					clear loop-entity
+					add 1 to {_count}
+				if {_count} is not set:
+					set {_count} to 0
+				broadcast "{@Prefix} &f&lYou just removed &f%{_count}% &&f&lentities!"
+
+		if player has permission "lagg.killmobs":
+			if arg 1 is "killmobs":
+				broadcast "{@Prefix} &bMobs have been removed!"
+				loop entities:
+					if loop-entity is a creature:
+						clear loop-entity
+					if loop-entity is a slime:
+						clear all slimes
+
+		if arg 1 is "area":
+			if arg 2 is not set:
+				send "&cWrong usage &8/&7Lagg <area> <radius>"
+
+		if player has permission "lagg.area":	
+			if arg 1 is "area":
+				if arg 2 is set:
+					clear {_count}
+					loop all arrows in radius arg-2 around player:
+						clear loop-entity
+						add 1 to {_count}
+					loop entities in radius arg-2 around player:
+						loop-entity is a dropped item
+						clear loop-entity
+						add 1 to {_count}
+					if {_count} is not set:
+						set {_count} to 0
+					broadcast "{@Prefix} &3%{_count}% &bEntities have been removed within a radius of &3%arg-2%!"
+command /clear1 [<text>]: 
+	trigger:	
+		if arg 1 is "lag":
+			clear {_count}
+			loop all arrows:
+				clear loop-entity
+				add 1 to {_count}
+			loop entities:
+				loop-entity is a dropped item
+				clear loop-entity
+				add 1 to {_count}
+			if {_count} is not set:
+				set {_count} to 0
+			broadcast "&6Removed &f&l%{_count}% &6Entities!"
+
+
+	

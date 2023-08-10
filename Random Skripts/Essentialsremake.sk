@@ -1,0 +1,2567 @@
+# |-> Essentials << # |->> Skript developed by Byteware (Byte)
+
+# |-> The skript allows you to have a remake of the Essentials plugin.
+
+
+# |-> %player% : This is a variable that allows you to put your nickname.
+# |-> %arg 1% : This is a variable that allows to put the argument indicate, you can change the number to infinity.
+# |-> %message% : This is a variable that can send a message to the game.
+# |-> %colored message% : This is a variable that sends a color message to the game.
+# |-> %loop-player% : This is a variable that allows you to group all players in the game.
+# |-> %player's location% : This is a variable that locates your coordinate.
+# |-> %player's world% : This is a variable that locates your position relative to a world.
+# |-> %player's level% : This is a variable that can locate your level of XP.
+# |-> %player's health% : This is a variable that can locate your life.
+# |-> %player's hunger% : This is a variable that can locate your hunger.
+# |-> %player's uuid% : This is a variable that can locate your skin.
+# |-> %player's gamemode% : This is a variable that locates your gamemode.
+# |-> %player's tool% : This is a variable that locates your item you have.
+# |-> %seed of player's world% : This is a variable that seed of player world.
+
+options:
+	# >> |- MESSAGE/CONFIG -|
+
+	Spawncooldown: 5
+	Spawncooldownuse: true
+	Teleportspawntodeath: true
+	Teleportspawntojoin: true
+
+	Warpcooldown: 5
+	Warpcooldownuse: true
+
+	Homecooldown: 5
+	Homecooldownuse: true
+
+	Antiafkcooldown: 300
+	Antiafkcooldownuse: true
+
+	Backcooldown: 5
+	Backcooldownuse: true
+
+	Kitcooldown: 5
+	Kitcooldownuse: true
+
+	Messagejoinquit: true
+	Messagedeath: true
+
+	Weatherrain: true
+	Weatherthunder: true
+
+	Emoticonuse: true
+
+	Damageall: true
+
+	Portailcreate: true
+
+	Maintenancecooldownuse: true
+	Maintenancecooldown: 10
+
+	# You can add or remove messages in cooldown auto-message !
+
+	Cooldownautomessagemsg1: 60
+	Cooldownautomessagemsg2: 120
+
+	Automessage: false
+
+	Clearlagtoentityarrows: true
+	Clearlagtoentityitemsdropped: true
+	Clearlagtoentityplayers: true
+
+	Removemoneytodeath: false
+	Moneytodeath: 50
+	Moneytodeathmessage1: &cYou lost
+	Moneytodeathmessage2: &c€.
+
+	Nopermission: <red>No Permission
+	Noplayerconnect: &cThe player is not connected.
+	Reloadmsg: &cYou have reloaded the plugin.
+	Worldcreatefinish: &cThe world create is finish.
+
+	Errortoconsoleisnotplayerusecommands: &cYou can not use this command in the server console !
+
+	# >> For chat format, you will not be able to put << or >> it does not work.
+
+	Chatformat: &7%{nick.%player%}% &6: &f%message%
+	Chatformatcolor: &7%{nick.%player%}% &6: &f%colored message%
+
+	Nobuild: &cYou could not build !
+
+	# >> COMMAND MESSAGE = /spawn, /setspawn, /delspawn -|
+
+	Setspawn: &6You have to place the spawn point!
+	Nospawnpoint: &6The spawn is not set!
+	Spawncooldown1: &6You will be teleported in
+	Spawncooldown2: &6seconds!
+	Spawnteleporting: &6&lTeleporting...
+	Teleportspawnisplayer: &6You have been teleported to spawn by &c%player%&6!
+	Teleportspawnisconsole: &6You have been teleported to spawn by &fConsole&6!
+
+	Deletespawn: &6&lYou removed the spawn point.
+
+	# >> COMMAND MESSAGE = /heal, /feed -|
+
+	Feedtome: &6You appetite has been sated!
+	Feedtoplayerisadmin: &6You have satisfied &c%arg 1% &6!
+	Feedtoplayer: &6Your appetite has been sated by &c%player% &6!
+	Feedtoplayerconsole: &6You have been satiated by &cConsole &6!
+
+	Healtome: &6You have been healed!
+	Healtoplayerisadmin: &6You healed &c%arg 1% &6!
+	Healtoplayer: &6You have been healed by &c%player% &66!
+	Healtoplayerconsole: &6You have been healed by &cConsole &6!
+
+	# >> COMMAND MESSAGE = /broadcast -|
+
+	Broadcast: &f%arg 1%
+	Broadcastcolor: &f%coloured arg 1%
+
+	Broadcasttopanel: &f%line 3 of block%
+
+	# >> COMMAND MESSAGE = /suicide -|
+
+	Suicide: &c%player% &6is suicide !
+
+	# >> COMMAND MESSAGE = /clearinventory -|
+
+	Cleartome: &7You have deleted your inventory!
+	Cleartoplayerisadmin: &6Your inventory has been deleted by &c%players%&6!
+	Cleartoplayerisconsole: &6Your inventory has been deleted by &cConsole&6!
+	Cleartoplayer: &6The player &c%arg 1% &6inventory has been deleted!
+
+	# >> COMMAND MESSAGE = /fly -|
+	
+	Flytome: &7You can now fly !
+	Noflytome: &7You can now no longer fly !
+	Flytoplayer: &6You can now fly by &c%players% &6!
+	Noflytoplayer: &6You can now no longer fly by &c%players% &6!
+	Flytoplayerisadmin: &6The player &c%arg-1% &6can now fly !
+	Noflytoplayerisadmin: &6The player &c%arg-1% &6can no longer fly !
+	Flytoplayerisconsole: &6You can now fly by &cConsole &6!
+	Noflytoplayerisconsole: &6You can now no longer fly by &cConsole &6!
+
+	# >> COMMAND MESSAGE = /me -|
+
+	Mebroadcast: &f* %player% &6>> &f%arg 1%
+	Mebroadcastcolor: &f* %player% &6>> &f%coloured arg 1%
+
+	Mebroadcasttopanel: &f* %player% &6>> &f%line 3 of block%
+
+	# >> COMMAND MESSAGE = /gamemode -|
+
+	Gamemodetometosurvival: &7Your game mode has been updated: &cSurvival &7!
+	Gamemodetometocreative: &7Your game mode has been updated: &cCreative &7!
+	Gamemodetometoadventure: &7Your game mode has been updated: &cAdventure &7!
+	Gamemodetometospectator: &7Your game mode has been updated: &cSpectator &7!
+	Gamemodetoplayertosurvival: &6Your game mode has been updated by &c%players%&6: &cSurvival &7!
+	Gamemodetoplayertocreative: &6Your game mode has been updated by &c%players%&6: &cCreative &7!
+	Gamemodetoplayertoadventure: &6Your game mode has been updated by &c%players%&6: &cAdventure &7!
+	Gamemodetoplayertospectator: &6Your game mode has been updated by &c%players%&6: &cSpectator &7!
+	Gamemodetoplayerisconsoletosurvival: &6Your game mode has been updated by &cConsole&6: &cSurvival &7!
+	Gamemodetoplayerisconsoletocreative: &6Your game mode has been updated by &cConsole&6: &cCreative &7!
+	Gamemodetoplayerisconsoletoadventure: &6Your game mode has been updated by &cConsole&6: &cAdventure &7!
+	Gamemodetoplayerisconsoletospectator: &6Your game mode has been updated by &cConsole&6: &cSpectator &7!
+	Gamemodetoplayeradmintosurvival: &6The player game mode &c%arg 2%&6 has been updated: &cSurvival &7!
+	Gamemodetoplayeradmintocreative: &6The player game mode &c%arg 2%&6 has been updated: &cCreative &7!
+	Gamemodetoplayeradmintoadventure: &6The player game mode &c%arg 2%&6 has been updated: &cAdventure &7!
+	Gamemodetoplayeradmintospectator: &6The player game mode &c%arg 2%&6 has been updated: &cSpectator &7!
+
+	# >> COMMAND MESSAGE = /motd -|
+
+	# >> You can change, add, remove phrases, sentences are between quotation marks after the wordd "send" !
+	# >> To add a metter phrase, send at the same height as the other "send" and then enclose between your quotes !
+	# >> To delete your sentence, remove the word "send" then your sentence that is between the quotation marks !
+
+command /motd:
+	permission: essentials.motd
+	permission message: {@Nopermission}
+	aliases: essentials:motd
+	usage: &cError &6>> &f/motd
+	trigger:
+		send "&c_-_-_-_-_-_-_- &c&lMotd &c_-_-_-_-_-_-_-" to player
+		send "&cWelcome to the server !" to player
+		send "&c_-_-_-_-_-_-_- &c&lMotd &c_-_-_-_-_-_-_-" to player
+		if {e-mail.%player%} > 0:
+			send "&fYou have &c%{e-mail.%player%}% message ! &fEnter &c/mail read &fto see your mail." to player
+		if {e-mail.%player%} < 0:
+			send "&7You do not have mail." to player
+
+options: # >> Continuation of message configuration !
+
+	# >> COMMAND MESSAGE = /helpop -|
+
+	Helpop: &c&l[&cHelpop&c&l] &c%player% &8: %arg 1%
+
+	# >> COMMAND MESSAGE = /freeze -|
+
+	Freezetome: &cYou are frozen !
+	Freezetoplayeradmin: &c%arg 1% &chas been frozen !
+	Nofreezetome: &cYou are unfrozen !
+	Nofreezetoplayeradmin: &c%arg 1% &chas been unfrozen !
+
+	# >> COMMAND MESSAGE = /tp, /tpall, /tphere -|
+
+	Tpteleporting: &6Teleporting...
+
+	Tpallteleporting: &6&lTeleporting...
+	Tpallteleportingisadmin: &6&lYou have teleported everyone!
+
+	Tphereteleporting: &6&lTeleporting...
+
+	# >> COMMAND MESSAGE = /ignore, /unignore -|
+
+	Ignore: &7You ignore the player &c%arg 1% &7!
+	Unignore: &7You do not know the player &c%arg 1% &7!
+
+	# >> COMMAND MESSAGE = /msg, /reply -|
+
+	Msgignore: &6&lYou are unaware of this player.
+
+	Msgformattome: &7[&c%player% &7> %arg 1%] &6: &7%arg 2%
+	Msgformattoplayer: &7[%player% > &c%arg 1%&7] &6: &7%arg 2%
+	Msgformatcolortome: &7(to %colored arg-1's prefix%%arg-1%&7) &7%arg 2%
+	Msgformatcolortoplayer: &7(from %colored player's prefix%%player%&7) &7%arg 2%
+
+	Replyformattome: &7[&c%player%&7] &6: &7%arg 1%
+	Replyformattoplayer: &7[%player%] &6: &7%arg 1%
+	Replyformatcolortome: &7[&c%player%&7] &6: &7%coloured arg 1%
+	Replyformatcolortoplayer: &7[%player%] &6: &7%coloured arg 1%
+
+	# >> COMMAND MESSAGE = /warp, /setwarp, /delwarp, /warps -|
+
+	Nowarpset: &cThe warp %arg 1% &cdoes not exist !
+
+	Warpcreate: &7The warp &c%arg 1% &7has been successfully created !
+	Warpdelete: &7The warp &c%arg 1% &7has been successfully deleted !
+
+	Warplist: &9Warps: &b%{warplist::*}%
+	Warpteleporting: &7Teleporting...
+
+	Warpcooldown1: &7You will be teleporting in
+	Warpcooldown2: &7seconds.
+
+	# >> COMMAND MESSAGE = /skull, /enderchest -|
+
+	Skull: &7You have given yourself a &c%arg 1% &7!
+
+	Enderchesttome: &7You have opened your enderchest !
+	Enderchesttoplayer: &7You have opened of player &c%arg 1% &7enderchest !
+
+	# >> COMMAND MESSAGE = /afk -|
+
+	Afktome: &c%player% &6is now AFK !
+	Noafktome: &c%player% &6is no longer AFK !
+	Afktoplayer: &c%arg 1% &6is now AFK !
+	Noafktoplayer: &c%arg 1% &6is no longer AFK !
+	Afktomeisantiafk: &c%loop-player% &6is no longer AFK !
+
+	Afkkickreason: &cYou've been kick for afk !
+
+	# >> COMMAND MESSAGE = /night, /day, /time -|
+
+	Day: &7You set the day !
+	Night: &7You set the night !
+
+	# >> COMMAND MESSAGE = /slap -|
+
+	Slaptome: &6You were slapped by &c%player% &7!
+	Slaptoplayeradmin: &6The player &c%arg 1% &6has been slapped!
+
+	# >> COMMAND MESSAGE = /speed -|
+
+	Speedreset: &7You have removed your speed !
+	Speedfly: &7You changed your speed !
+	Speedwalk: &7You changed your speed !
+
+	# >> COMMAND MESSAGE = /mute, /unmute -|
+
+	Mutebroadcast: &c%arg 1% &7was silenced by &c%player% &7for &c%number argument% &7seconds !
+	Unmutebroadcast: &c%player% &7gave the floor to &c%arg 1% &7!
+	Unmutealready: &c%arg 1% &7already has the floor !
+	Mute: &7You are silent again &c%{mute.seconds.%player%}% &7seconds !
+	Unmutebroadcastisconsole: &cConsole &7gave the floor to &c%arg 1% &7!
+	Mutebroadcastisconsole: &c%arg 1% &7was silenced by &cConsole &7for &c%number argument% &7seconds !
+
+	# >> COMMAND MESSAGE = /kick, /kickall -|
+
+	Kickbroadcastisplayer: &c%arg 1% &7has been expelled by &c%player% &7for &c%coloured arg 2%
+	Kickbroadcastisconsole: &c%arg 1% &7has been expelled by &cConsole &7for &c%coloured arg 2%
+	Kick: &cKicked for &c%coloured arg 2%
+
+	Kickall: &cKicked for &c%coloured arg 1%
+
+	# >> COMMAND MESSAGE = /home, /sethome, /homes, /delhome, /adminhome -|
+
+	Homeslist: &6&lHomes: &f%{homename.%player%::*}%
+
+	Hometeleporting: &6&lYou have been teleported to your home!
+	Nohome: &6&lYou do not have a home calling %arg 1% &7!
+	Homedelete: &6&lYou have deleted your home called &c%arg 1%&7!
+	Homecreate: &6&lYou created the home &c%arg 1% &7!
+	Homealready: &6&lYou already have a home named &c%arg 1% &7!
+	Adminhomereset: &6&lYou have removed these homes: &c%arg 2% &7!
+	Homecooldown1: &6&lYou will be teleporting in
+	Homecooldown2: &6&lseconds!
+	Adminhomenohome: &6&lThere is no home calling %arg 3%!
+	Adminhometeleporting: &6You have been teleported to a player home!
+	Adminhomedelhome: &6You have removed &c%arg 3% &6for the player home &c%arg 2% &6!
+	Adminhomesethome: &6You have set &c%arg 3% &6for the player home &c%arg 2% &6!
+	Adminhomealready: &6Home &c%arg 3% &6&lalready exists!
+
+	Adminhomehome: &9Homes: &b%{homename.%arg 2%::*}%
+
+	# >> You can delete or add permission to have numbers of home per homes.
+	# >> You can add permissions by adding !
+	#
+	#	if sender has permission "essentials.home.NAMEOFHOME" or "essentials.*": 
+	#		if {homes.%player%} = NUMBEROFHOME ":
+	#			message "&7You can not set more than NAMEOFHOME homes!"
+	#			stop
+
+command /sethome [<text>]:
+	permission: essentials.sethome
+	permission message: {@Nopermission}
+	aliases: essentials:sethome
+	executable by: players
+	usage: &cError &6>> &f/sethome [home]
+	trigger:
+		if arg 1 is not set:
+			send "&cError &6>> &f/sethome [home]"
+			stop
+		if arg 1 is set:
+			if sender has permission "essentials.home.3" or "essentials.*":
+				if {homes.%player%} = 3:
+					send "&7You cannot set more than 3 homes!" to player
+					stop
+			if sender has permission "essentials.home.6" or "essentials.*":
+				if {homes.%player%} = 6:
+					send "&7You cannot set more than 6 homes!" to player
+					stop
+			if {home.%player%::%arg 1%} is set:
+				send "{@Homealready}" to player
+			if {home.%player%::%arg 1%} is not set:
+				add 1 to {homes.%player%}
+				send "{@Homecreate}" to player
+				set {home.%player%::%arg 1%} to location of player
+				set {homename.%player%::%arg 1%} to arg 1
+				stop
+
+options: # >> Continuation of message configuration!
+
+	# >> COMMAND MESSAGE = /nick -|
+
+	Nickredefine: &7You have redefined the player nickname &c%arg 1% &7!
+	Nicktoplayeradmin: &7You have changed the nickname of &c%arg 1% &8in &c%coloured arg 2% &7!
+	Nicktoplayer: &cYour nickname was changed !
+
+	# >> COMMAND MESSAGE = /money, /eco, /pay -|
+
+	Moneytome: &7You have &c%{money.%player%}% &c€ &7!
+	Moneytoplayer: &7The player &c%arg 1% &7has &c%{money.%arg 1%}% &c€ &7!
+
+	Ecogivetoplayeradmin: &6You have to add &c%arg 3% &c€ &6to player &c%arg 2% &6!
+	Ecogivetome: &c%player% &6you to add &c%arg 3% &c€ &6!
+	Ecoremovetoplayeradmin: &6You have removed &c%arg 3% &c€ &6to player &c%arg 2% &7!
+	Ecoremovetome: &c%player% &6has you removed %arg 3% &c€ &6!
+	Ecoremovenomoneytome: &c%arg-2% does not have enough money !
+	Ecosettoplayeradmin: &6You have to set &c%arg 3% &c€ &6to player &c%arg 2% &6!
+	Ecosettome: &c%player% &6has set your money on &c%arg 3% &c€ &6!
+
+	Paynomoney: &cYou do not have enough money !
+	Paynonumberpositive: &cYou can not put negative number !
+	Paytome: &7You have sent &c%arg 2% &c€ &7to player &c%arg 1% &7!
+	Paytoplayer: &c%player% &7you to send &c%arg 2% &c€ &7!
+
+	# >> COMMAND MESSAGE = /god -|
+
+	Godtome: &7You have activated your god mode !
+	Nogodtome: &7You have disabled your god mode !
+	Godtoplayer: &c%player% &6has activated your god mode !
+	Nogodtoplayer: &c%player% &6has disabled your god mode !
+	Godtoplayeradmin: &6The god mode of the &c%arg 1% &6player has been activated !
+	Nogodtoplayeradmin: &6The god mode of the &c%arg 1% &6player has been disabled !
+
+	# >> COMMAND MESSAGE = /seen -|
+
+	Noplayerseen: &cYou have not defined the player to check !
+	Seen: &7IP of &c%arg 1% &7: &c%{ip.%arg 1%}%
+
+	# >> COMMAND MESSAGE = /near -|
+
+	Near: &c%loop-value% &7is at &c(%{_locs::%{_m}%}%&cm) &7!
+	Nearnoplayer: &cNo player in the vicinity !
+
+	# >> COMMAND MESSAGE = /getpos -|
+
+	Getpostome: &7%player%&6: &c%player's location% &c!
+	Getpostoplayer: &7%arg 1%&6: &c%arg 1's location% &c!
+
+	# >> COMMAND MESSAGE = /list -|
+
+	list: &7Player(s) online&6: &c%{_list::*}% &c!
+
+	# >> COMMAND MESSAGE = /list -|
+
+	Backteleporting: &7Teleporting...
+	Nobackpoint: &cYou have no back point for the return !
+	Backcooldown1: &7You will be teleporting in
+	Backcooldown2: &7seconds !
+
+	# >> COMMAND MESSAGE = /xp -|
+
+	Expshowtome: &7%player%&6: &c%player's level% &c!
+	Expshowtoplayeradmin: &7%arg 2%&6: &c%level of arg 2% &c!
+	Expsettoplayeradmin: &6The player's level bar &c%arg 2% &6has been changed !
+	Expsettoplayer: &7Your level bar has been modified !
+	Expgivetoplayeradmin: &6The player's level bar &c%arg 2% &6has been changed !
+	Expgivetoplayer: &7Your level bar has been modified !
+	Expremovetoplayeradmin: &6The player's level bar &c%arg 2% &6has been changed !
+	Expremovetoplayer: &7Your level bar has been modified !
+
+	# >> COMMAND MESSAGE = /break, /antioch -|
+
+	Break: &cYou broke a block !
+	Antioch: &cYou have launched a tnt !
+
+	# >> COMMAND MESSAGE = /seen -|
+
+	Seenyes: &cYes
+	Seenno: &cNo
+
+	# You can change messages !
+
+command /seen [<player>]:
+	permission: essentials.seen
+	permission message: {@Nopermission}
+	aliases: essentials:seen
+	executable by: players
+	usage: &cError &6>> &f/seen [player]
+	trigger:
+		if arg 1 is not set:
+			if {afk.%player%} is set:
+				set {_afk} to "{@Seenyes}"
+			else:
+				set {_afk} to "{@Seenno}"
+			if {essentials.god.%player%} is true:
+				set {_god} to "{@Seenyes}"
+			else:
+				set {_god} to "{@Seenno}"
+			if {mute.%arg-1%} is true:
+				set {_mute} to "{@Seenyes}"
+			else:
+				set {_mute} to "{@Seenno}"
+			if {banplayer.%player%} is true:
+				set {_ban} to "{@Seenyes}"
+			else:
+				set {_ban} to "{@Seenno}"
+			if {freeze.%player%.frozen.gm} is true:
+				set {_freeze} to "{@Seenyes}"
+			else:
+				set {_freeze} to "{@Seenno}"
+			if {vanish.%player%} is set:
+				set {_vanish} to "{@Seenyes}"
+			else:
+				set {_vanish} to "{@Seenno}"
+			send "&7-_-_-_-_-_-_-_ &c%player% &7-_-_-_-_-_-_-_" to player
+			send "&7IP&6: &c%{ip.%player%}%" to player
+			send "&7UUID&6: &c%player's uuid%" to player
+			send "&7God mode&6: &c%{_god}%" to player
+			send "&7Afk&6: &c%{_afk}%" to player
+			send "&7Vanish&6: &c%{_vanish}%" to player
+			send "&7Money&6: &c%{money.%player%}% &c€" to player
+			send "&7Gamemode&6: &c%player's gamemode%" to player
+			send "&7Freeze: &c%{_freeze}%" to player
+			send "&7Mute&6: &c%{_mute}%" to player
+			send "&7Ban&6: &c%{_ban}%" to player
+			send "&7Coords&6: &c%player's location%" to player
+			send "&7World&6: &c%player's world%" to player
+			send "&7Exp&6: &c%player's level%" to player
+			send "&7Health&6: &c%player's health%&c/10" to player
+			send "&7Hunger&6: &c%player's hunger%&c/10" to player
+			send "&7Seed world&6: &c%seed of player's world%" to player
+			stop
+		if arg 1 is online:
+			if sender has permission "essentials.seen.others" or "essentials.*":
+				if {afk.%argument 1%} is set:
+					set {_afk} to "{@Seenyes}"
+				else:
+					set {_afk} to "{@Seenno}"
+				if {essentials.god.%arg 1%} is true:
+					set {_god} to "{@Seenyes}"
+				else:
+					set {_god} to "{@Seenno}"
+				if {mute.%arg-1%} is true:
+					set {_mute} to "{@Seenyes}"
+				else:
+					set {_mute} to "{@Seenno}"
+				if {banplayer.%arg-1%} is true:
+					set {_ban} to "{@Seenyes}"
+				else:
+					set {_ban} to "{@Seenno}"
+				if {freeze.%argument%.frozen.gm} is true:
+					set {_freeze} to "{@Seenyes}"
+				else:
+					set {_freeze} to "{@Seenno}"
+				if {vanish.%arg 1%} is set:
+					set {_vanish} to "{@Seenyes}"
+				else:
+					set {_vanish} to "{@Seenno}"
+				send "&7-_-_-_-_-_-_-_ &c%arg 1% &7-_-_-_-_-_-_-_" to player
+				send "&7IP&6: &c%{ip.%arg 1%}%" to player
+				send "&7UUID&6: &c%arg 1's uuid%" to player
+				send "&7God mode&6: &c%{_god}%" to player
+				send "&7Afk&6: &c%{_afk}%" to player
+				send "&7Vanish&6: &c%{_vanish}%" to player
+				send "&7Money&6: &c%{money.%arg 1%}% &c€" to player
+				send "&7Gamemode&6: &c%arg 1's gamemode%" to player
+				send "&7Freeze: &c%{_freeze}%" to player
+				send "&7Mute&6: &c%{_mute}%" to player
+				send "&7Ban&6: &c%{_ban}%" to player
+				send "&7Coords&6: &c%arg 1's location%" to player
+				send "&7World&6: &c%arg 1's world%" to player
+				send "&7Exp&6: &c%arg 1's level%" to player
+				send "&7Health&6: &c%arg 1's health%&c/10" to player
+				send "&7Hunger&6: &c%arg 1's hunger%&c/10" to player
+				send "&7Seed world&6: &c%seed of arg 1's world%" to player
+				stop
+			if sender doesn't have permission "essentials.seen.others" or "essentials.*":
+				send "{@Nopermission}" to player
+				stop
+
+options: # >> Continuation of message configuration !
+
+	# >> COMMAND MESSAGE = /workbench -|
+
+	Workbench: &7You have opened your workbench !
+
+	# >> COMMAND MESSAGE = /banip, /ban -|
+
+	Banipreasondefault: &cThe Ban Hammer has Spoken !
+	Banip: &c%arg 1% &6has been IP-banned for
+
+	Banreasondefault: &cThe Ban Hammer has Spoken !
+	Ban: &c%arg 1% &6has been banned for
+
+	Banalready: &cYou have already banned the player &c%arg 1% &c!
+	Banipalready: &cYou have already banned [IP] from the player &c%arg 1% &c!
+
+	# >> COMMAND MESSAGE = /unban, /unbanip -|
+
+	Unban: &c%arg 1% &6was unbanned by &c%player% &6!
+	Unbanip: &c%arg 1% &6was IP-unbanned by &c%player% &6!
+	Unbantoconsole: &c%arg 1% &6was unbanned by &cConsole &6!
+	Unbaniptoconsole: &c%arg 1% &6was IP-unbanned by &cConsole &6!
+
+	Unbanalready: &cYou already have unbanned for the player &c%arg 1% &c!
+	Unbanipalready: &cYou already have an unbanned [IP] of player &c%arg 1% &c!
+
+	# >> COMMAND MESSAGE = /unlimited -|
+
+	Unlimitedenabletome: &6You have &cenabled &6the unlimited placing of blocks !
+	Unlimiteddisabletome: &6You have &cdisabled &6the unlimited placing of blocks !
+	Unlimitedenabletoplayeradmin: &6The unlimited placing of blocks has been enabled for &c%arg 1% &6!
+	Unlimiteddisabletoplayeradmin: &6The unlimited placing of blocks has been disable for &c%arg 1% &6!
+
+	# >> COMMAND MESSAGE = /burn -|
+
+	Burntome: &6You have been burned by the player &c%player% &6!
+	Burntoplayeradmin: &6You burned the player &c%arg 1% &6!
+
+	# >> COMMAND MESSAGE = /depth -|
+
+	Depthtome: &7You are &c%altitude of the player% &7blocks above bedrock !
+	Depthtoplayeradmin: &c%arg 1% &7is &c%altitude of arg 1% &7blocks above bedrock !
+
+	# >> COMMAND MESSAGE = /ext -|
+
+	Exttome: &7You are no longer on fire !
+	Exttoplayerme: &6You are no longer on fire by &c%player% &6!
+	Exttoplayeradmin: &c%arg 1% &6is no longer on fire !
+
+	# >> COMMAND MESSAGE = /enchant -|
+
+	Enchanttoair: &cYou cannot enchant air !
+	Enchant: &7Your item has been enchanted with &c%arg 1% &7!
+
+	# >> COMMAND MESSAGE = /fireball -|
+
+	Fireball: &cYou have launched a fireball !
+
+	# >> COMMAND MESSAGE = /tree, /bigtree -|
+
+	Tree: &7A tree has been grown above the block you are looking at !
+
+	# >> COMMAND MESSAGE = /deljail, /jail, /setjail, /jail -|
+
+	Deljailremove: &7Jail &c%arg 1% &7has been removed !
+	Deljailnojail: &c%arg 1% &cis not a jail !
+
+	Jails: &7The current jails are&6: &c%{_jl::*}%
+
+	Setjailcreate: &7Jail &c%arg 1% &7has been set !
+	Setjailalready: &cThe jail %arg 1% &calready exists !
+
+	Nojailplayeradmin: &c%arg 1% &7is no longer jailed !
+	Jailplayeradmin: &c%arg 1% &7is now jailed !
+	Nojailplayer: &cYou are no longer jailed by &c%player% &c!
+	Jailplayer: &cYou are now jailed by &c%player% &c!
+	Nojail: &c%arg 2% is not a jail !
+
+	Jailchat: &cYou cannot speak while in jail !
+
+	# >> COMMAND MESSAGE = /compass -|
+
+	Compasstome: &7Orientation: &c%player's facing% &7(&c%player's yaw% &cdegrees&7) !
+	Compasstoplayer: &7Orientation of %arg 1%: &c%arg 1's facing% &7(&c%arg 1's yaw% &cdegrees&7) !
+
+	# >> COMMAND MESSAGE = /tpa, /tpaccept, /tpdeny, /tpo, /tpohere -|
+
+	Tpacooldownteleportuse: true
+	Tpacooldownteleportinseconds: 10
+
+	Notpa: &cYou have no pending teleport requests !
+	Tpa: &6%player% has requested to TP to you, &f/tpaccept &6or &f/tpdeny&f!
+	Tpasendtoplayer: &6Teleport request sent to %colored arg 1's prefix%%arg 1%&e.
+	Tpasendtoplayer2: &6%colored player's prefix%%player% &6has requested to TP to you!
+	Tpaccept: &fTeleport request accepted!
+	Tpacceptteleporting: &6Teleporting...
+	Tpdeny: &6Teleport request denied!
+
+	Tpoteleporting: &6Teleporting...
+	Tpoplayeradmin: &6Teleportation of &c%arg 1% &7towards &c%arg 2% &7!
+
+	Tpohereteleporting: &6Teleporting...
+
+	# >> MESSAGE CONSOLE LOADING -|
+
+	Loading: &6[Essentials] &6|-> &8Loading finish !
+
+	# >> COMMAND MESSAGE = /spawnmob -|
+
+	Spawnmob: &6You made spawn &c%arg 2% %arg 1% &7!
+
+	# >> COMMAND MESSAGE = /sudo -|
+
+	Sudo: &6You executed the command&c%arg 2% &6for &c%arg 1%&7!
+
+	# >> COMMAND MESSAGE = /repair -|
+
+	Repairtome: &6&lYou have successfully repaired your: &c%player's tool% &7!
+	Repairalltome: &6You have successfully repaired all your stuff!
+	Repairalltoplayeradmin: &6You have successfully repaired the player's stuff &c%arg 2%&7!
+	Repairalltoplayer: &6Your stuff has been repaired by &c%player%&7!
+
+	# >> COMMAND MESSAGE = /powertool -|
+
+	Powertooltoremove: &7All orders have been removed from &c%player's tool% &7!
+	Powertool: &7Order &c%arg 1% &7assigned to &c%player's tool% &7!
+
+	# >> COMMAND MESSAGE = /mail -|
+
+	Mailread: &7To mark your mail as read, type &c/mail clear &7!
+	Mailclear: &7All your e-mails have been deleted !
+	Mailsendtoplayer: &c%player% &7sent you an e-mail !
+	Mailsendtome: &7You sent the e-mail to the player &c%player% &7!
+	Nomail: &7You do not have mail !
+
+	# >> COMMAND MESSAGE = /createkit, /deletekit, /kit, /kits -|
+
+	# ! >> To have a kit, you have to have the inventory empty ! << ! #
+
+	Createkit: &7The kit &c%arg 1% &7has been successfully created !
+	Createkitalready: &cThe &c%arg 1% &ckit has already been created !
+
+	Deletekit: &7The kit &c%arg 1% &7has been successfully deleted !
+	Deletekitalready: &cThe &c%arg 1% &ckit has already been removed !
+
+	kit: &7You have taken the kit &c%arg 1% &7!
+	Nokit: &cThe kit &c%arg 1% &cdoes not exist !
+
+	Kitcooldown1: &7You will be teleporting in
+	Kitcooldown2: &7seconds.
+
+	Kits: &9Kits: &b%{kit::*}%
+
+		# >> COMMAND MESSAGE = SIGN COMMANDS -|
+
+	Signcommands: &7You have to create a sign with a command !
+
+	Signwarpnowarp: &cYou are no warp !
+	Signkitnokit: &cYou are no kit !
+
+		# >> COMMAND MESSAGE = OPEN TRASH COMMANDS -|
+
+	Trashname: &0&lTrash
+	Trash: &7You opened the trash !
+
+	Trashnumberchest: 6
+
+	# >> COMMAND MESSAGE = DROP PERMISSION -|
+
+	Nodrop: &cYou do not have permission to drop an item !
+
+	# >> COMMAND MESSAGE = /vanish -|
+
+	Vanishtome: &7You are &cVanish &7!
+	Novanishtome: &7You are no longer &cVanish &7!
+	Vanishtoplayer: &7You are &cVanish &7!
+	Novanishtoplayer: &7You are no longer &cVanish &7!
+	Vanishtoplayeradmin: &6The player &c%arg 1% &6is now in vanish !
+	Novanishtoplayeradmin: &6The player &c%arg 1% &6is no longer vanish !
+
+	# >> COMMAND MESSAGE = /hat -|
+
+	Hattome: &7You put a block that you have in your hand !
+	Hattoplayer: &7Your hat was put by the player &c%player% &7!
+	Hattoplayeradmin: &6You put a block block that you have in the hand to the player &c%arg 2% &6!
+	Nohat: &7You do not have a hat !
+	Hattoair: &cYou do not have a block or object as a hat !
+
+	# >> COMMAND MESSAGE = /weather -|
+
+	Weathertoclear: &6You cleared the weather!
+	Weathertosun: &6You changed the weather to sunny!
+	Weathertorain: &6It's now raining.!
+	Weathertothunder: &6You created a thunderstorm!
+
+	# >> COMMAND MESSAGE = /chat -|
+
+	Chatclear: &cThe broadcast has been deleted !
+
+	# >> COMMAND MESSAGE/CONFIG = BLOCK COMMAND -|
+
+	# You can change block command !
+
+on command "/pl":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/plugins":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/?":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/ver":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/version":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/a":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/about":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:about":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:?":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:ver":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/icanhasbukkit":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:plugins":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:version":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:pl":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:a":
+	if sender doesn't have permission "essentials.blockcommand.bypass" or "essentials.*":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass" or "essentials.*":
+		stop
+
+on command "/bukkit:help":
+	if sender doesn't have permission "essentials.blockcommand.bypass":
+		send "{@Nopermission}" to player
+		cancel event
+		stop
+	if sender has permission "essentials.blockcommand.bypass":
+		stop
+
+options: # >> Continuation of message configuration !
+
+	# >> COMMAND MESSAGE = /invsee -|
+
+	Invsee: &6You have opened inventory of &c%arg 1% &6!
+
+	# >> COMMAND MESSAGE = /lag -|
+
+	Clearlagentityarrows: &7You have clear &c%{_count}% &7entity arrows !
+	Clearlagentityitemsdropped: &7You have clear &c%{_count}% &7entity dropped !
+	Clearlagentityplayers: &7You have clear &c%{_count}% &7entity players !
+
+
+	# >> COMMAND MESSAGE/CONFIG = AUTO MESSAGE -|
+
+	# >> You can add or delete messages by following the following:
+
+	#
+	#	every {@CooldownautomessagemsgNUMBER-FOR-MESSAGE} seconds: 
+	#		if {@Automessage} is true:
+	#			broadcast "NAME OF MESSAGE..."
+	#		if {@Automessage} is false:
+	#			stop
+
+every {@Cooldownautomessagemsg1} seconds:
+	if {@Automessage} is true:
+		broadcast "&7[&eBroadcast&7] &fHello the server !"
+	if {@Automessage} is false:
+		stop
+
+options: # >> Continuation of message configuration !
+
+	# >> COMMAND MESSAGE = /maintenance -|
+
+	Maintenanceenablejoin: &cThe server is in maintenance !
+	Maintenancekick: &cYou have been kicked from the server !
+	Maintenancecooldown1: &cThe server will have a
+	Maintenancecooldown2: &cseconds !
+	Maintenanceenable: &cServer maintenance has been disabled !
+	Maintenancealreadyenable: &6Server maintenance is already enabled !
+	Maintenancealreadydisable: &6Server maintenance is already disabled !
+
+	# >> COMMAND MESSAGE = /seed -|
+
+	Seed: &7Seed: &6%seed of player's world% &7!
+
+	# >> COMMAND MESSAGE = /pvp -|
+
+	Pvptoenable: &7Pvp is enabled !
+	Pvptodisable: &7Pvp is disable !
+	Pvptoalreadyenable: &cPvp is already enabled !
+	Pvptoalreadydisable: &cPvp is already disable !
+
+	# >> COMMAND MESSAGE = /thor -|
+
+	Thor: &7You have invoked a flash !
+
+	# >> COMMAND MESSAGE = /nuke -|
+
+	Nuke: &7You have invoked a tnt !
+	Nukefallingtonumbersmeters: 10
+
+	# >> COMMAND MESSAGE = /fakebroadcastmessage (/fbm) -|
+
+	Fakebroadcastmessagetoop: &6The player &c%arg 2% &6as been put in op mode of the server !
+	Fakebroadcastmessagetodeop: &6The player &c%arg 2% &6as been put in deop mode of the server !
+	Fakebroadcastmessagetoplayerjoiningame: &6The player &c%arg 2% &6just connected to the server !
+	Fakebroadcastmessagetoplayerfirstjoin: &6The player &c%arg 2% &6Just login for the first time !
+
+	# >> COMMAND MESSAGE = /bedteleport -|
+
+	Bedteleportteleporting: &7Teleporting...
+	Bedteleportnotbedexisttome: &cYou do not have a bed !
+	Bedteleportnotbedexisttoplayer: &cThe player &c%arg 1% &cdoes not have a bed !
+	Bedteleportnotbedexisttoplayertopanel: &cThe player &c%line 3 of block% &cdoes not have a bed !
+
+	# >> COMMAND MESSAGE = /chunk -|
+
+	Slimechunktome: &7The chunk of location of player is a slime chunk !
+	Slimechunktoplayeradmin: &7The chunk of location of &c%arg 1% &7is a slime chunk !
+	Slimenochunktome: &7The chunk of location of player is not a slime chunk !
+	Slimenochunktoplayeradmin: &7The chunk of location of &c%arg 1% &7is not a slime chunk !
+
+	# >> COMMAND MESSAGE = /op, /deop -|
+
+	Optoplayertome: &7You put operator the player &c%arg 1% &7!
+	Optoplayertoplayer: &7You have been put operator by the player &c%player% &7!
+	Optoconsoletoplayer: &7You have been put operator by the &cConsole &7!
+	Optoconsole: &7You put operator the player &c%arg 1% &7!
+	Optoalready: &7You already put operator the player &c%arg 1% &7!
+
+	Deoptoplayertome: &7You have removed the &c%arg 1% &7operator !
+	Deoptoplayertoplayer: &7You have been put deoperator by the player &c%player% &7!
+	Deoptoconsoletoplayer: &7You have been put deoperator by the &cConsole &7!
+	Deoptoconsole: &7You have removed the &c%arg 1% &7operator !
+	Deoptoalready: &7You already put deoperator the player &c%arg 1% &7!
+
+	# >> COMMAND MESSAGE = /butcher -|
+
+	Butcher: &7You have remove the all mobs !
+
+# ___  ______  ______  ______  ______  ______  ______  ______  ______  ___ #
+#  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  #
+# (______)(______)(______)(______)(______)(______)(______)(______)(______) #
+#
+#                              THE CODE
+# ___  ______  ______  ______  ______  ______  ______  ______  ______  ___ #
+#  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  #
+# (______)(______)(______)(______)(______)(______)(______)(______)(______) #
+command /weather [<text>]:
+	permission: essentials.weather
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/weather [sun/rain/thunder/clear]
+	aliases: essentials:weather, essentials:toggledownfall, toggledownfall
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/weather [sun/rain/thunder/clear]" to player
+				stop
+			if arg 1 is not "sun" or "clear" or "thunder" or "rain":
+				send "&cError &6>> &f/weather [sun/rain/thunder/clear]" to player
+				stop
+			if arg 1 is "clear":
+				if sender has permission "essentials.weather.*" or "essentials.weather.clear" or "essentials.*":
+					set weather to sunny
+					send "{@Weathertoclear}" to player
+					stop
+				if sender doesn't have permission "essentials.weather.*" or "essentials.weather.clear" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is "sun":
+				if sender has permission "essentials.weather.*" or "essentials.weather.sun" or "essentials.*":
+					set weather to sunny
+					send "{@Weathertosun}" to player
+					stop
+				if sender doesn't have permission "essentials.weather.*" or "essentials.weather.sun" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is "rain":
+				if sender has permission "essentials.weather.*" or "essentials.weather.rain" or "essentials.*":
+					set weather to rain
+					send "{@Weathertorain}" to player
+					stop
+				if sender doesn't have permission "essentials.weather.*" or "essentials.weather.rain" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is "thunder":
+				if sender has permission "essentials.weather.*" or "essentials.weather.thunder" or "essentials.*":
+					set weather to thunder
+					send "{@Weathertothunder}" to player
+					stop
+				if sender doesn't have permission "essentials.weather.*" or "essentials.weather.thunder" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+on weather change to rain:
+	if {@Weatherrain} is false:
+		cancel event
+		stop
+	if {@Weatherrain} is true:
+		stop
+
+on weather change to thunder:
+	if {@Weatherthunder} is false:
+		cancel event
+		stop
+	if {@Weatherthunder} is true:
+		stop
+
+command /trash:
+	permission: essentials.trash
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/trash
+	aliases: essentials:trash, essentials:bin, bin
+	trigger:
+		if sender is a player:
+			wait 2 ticks
+			open chest with {@Trashnumberchest} rows named "{@Trashname}" to player
+			send "{@Trash}" to player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /createkit [<text>]:
+	permission: essentials.createkit
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/createkit [kit]
+	aliases: essentials:createkit
+	trigger:
+		if sender is a player:
+			if arg 1 is set:
+				if {kit.%player%::%arg 1%} is not set:
+					set {_count} to 0
+					loop 36 times:
+						set {inv.%player%.%{_count}%.%arg 1%} to slot {_count} of player's inventory
+						add 1 to {_count}
+						set {helmet.%arg 1%.kit.%player%} to the player's helmet
+						set {chestplate.%arg 1%.kit.%player%} to the player's chestplate
+						set {legs.%arg 1%.kit.%player%} to the player's legs
+						set {boot.%arg 1%.kit.%player%} to the player's boot
+					send "{@Createkit}" to player
+					set {kit.%player%::%arg 1%} to true
+					add arg 1 to {kit::*}
+					stop
+				if {kit.%player%::%arg 1%} is true:
+					send "{@Createkitalready}" to player
+					stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/createkit [kit]" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /deletekit [<text>]:
+	permission: essentials.deletekit
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/deletekit [kit]
+	aliases: essentials:deletekit
+	trigger:
+		if sender is a player:
+			if arg 1 is set:
+				if {kit.%player%::%arg 1%} is set:
+					delete {helmet.%arg 1%.kit.%player%}
+					delete {chestplate.%arg 1%.kit.%player%}
+					delete {legs.%arg 1%.kit.%player%}
+					delete {boot.%arg 1%.kit.%player%}
+					delete {inv.%arg 1%.kit.%player%}
+					delete {kit.%player%::%arg 1%}
+					remove arg 1 from {kit::*}
+					send "{@Deletekit}" to player
+					stop
+				if {kit.%player%::%arg 1%} is not set:
+					send "{@Deletekitalready}" to player
+					stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/deletekit [kit]" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /repair [<text>] [<offline player>]:
+	permission: essentials.repair
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/repair [all] [player]
+	aliases: essentials:repair
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				repair player's tool
+				send "{@Repairtome}" to player
+				stop
+			if arg 1 is "all":
+				if arg 2 is not set:
+					send "{@Repairalltome}" to player
+					repair slot 0 of player
+					repair slot 1 of player
+					repair slot 2 of player
+					repair slot 3 of player
+					repair slot 4 of player
+					repair slot 5 of player
+					repair slot 6 of player
+					repair slot 7 of player
+					repair slot 8 of player
+					repair slot 9 of player
+					repair slot 10 of player
+					repair slot 11 of player
+					repair slot 12 of player
+					repair slot 13 of player
+					repair slot 14 of player
+					repair slot 15 of player
+					repair slot 16 of player
+					repair slot 17 of player
+					repair slot 18 of player
+					repair slot 19 of player
+					repair slot 20 of player
+					repair slot 21 of player
+					repair slot 22 of player
+					repair slot 23 of player
+					repair slot 24 of player
+					repair slot 25 of player
+					repair slot 26 of player
+					repair slot 27 of player
+					repair slot 28 of player
+					repair slot 29 of player
+					repair slot 30 of player
+					repair slot 31 of player
+					repair slot 32 of player
+					repair slot 33 of player
+					repair slot 34 of player
+					repair slot 35 of player
+					repair helmet slot of player		
+					repair chestplate slot of player
+					repair leggings slot of player
+					repair boots slot of player
+					stop
+				if arg 2 is online:
+					if sender has permission "essentials.repair.others" or "essentials.*":
+						send "{@Repairalltoplayeradmin}" to player
+						send "{@Repairalltoplayer}" to arg 2
+						repair slot 0 of arg 2
+						repair slot 1 of arg 2
+						repair slot 2 of arg 2
+						repair slot 3 of arg 2
+						repair slot 4 of arg 2
+						repair slot 5 of arg 2
+						repair slot 6 of arg 2
+						repair slot 7 of arg 2
+						repair slot 8 of arg 2
+						repair slot 9 of arg 2
+						repair slot 10 of arg 2
+						repair slot 11 of arg 2
+						repair slot 12 of arg 2
+						repair slot 13 of arg 2
+						repair slot 14 of arg 2
+						repair slot 15 of arg 2
+						repair slot 16 of arg 2
+						repair slot 17 of arg 2
+						repair slot 18 of arg 2
+						repair slot 19 of arg 2
+						repair slot 20 of arg 2
+						repair slot 21 of arg 2
+						repair slot 22 of arg 2
+						repair slot 23 of arg 2
+						repair slot 24 of arg 2
+						repair slot 25 of arg 2
+						repair slot 26 of arg 2
+						repair slot 27 of arg 2
+						repair slot 28 of arg 2
+						repair slot 29 of arg 2
+						repair slot 30 of arg 2
+						repair slot 31 of arg 2
+						repair slot 32 of arg 2
+						repair slot 33 of arg 2
+						repair slot 34 of arg 2
+						repair slot 35 of arg 2
+						repair helmet slot of arg 2		
+						repair chestplate slot of arg 2
+						repair leggings slot of arg 2
+						repair boots slot of arg 2
+						stop
+					if sender doesn't have permission "essentials.repair.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /sudo [<offline player>] [<text>]:
+	permission: essentials.sudo
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/sudo [player] [command]
+	aliases: essentials:sudo
+	trigger:
+		if sender is a player:
+			if arg 1 is online:
+				if arg 2 is set:
+					execute arg 1 command arg 2
+					send "{@Sudo}" to player
+					stop
+				if arg 2 is not set:
+					send "&cError &6>> &f/sudo [player] [commands]" to player
+					stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/sudo [player] [commands]" to player
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+#			teleport player to target block
+
+command /tpa [<offline player>]:
+	executable by: players, console
+	usage: &cUsage: &c/tpa [player]
+	aliases: essentials:tpa
+	trigger:
+		if sender is a player:
+			if arg 1 is online:
+				set {tpa.%arg 1%} to player
+				send "{@Tpasendtoplayer}"  to player
+				send "{@Tpasendtoplayer2}" to arg 1
+				send "{@Tpa}" to arg 1
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop	
+			if arg 1 is not set:
+				send "&cError &6>> &f/tpa [player]" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /tpaccept:
+	permission: essentials.tpdeny
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/tpaccept
+	aliases: tpyes, essentials:tpaccept, essentials:tpyes
+	trigger:
+		if sender is a player:
+			if {tpa.%player%} is set:
+				if {@Tpacooldownteleportuse} is false:
+					send "{@Tpaccept}" to player
+					send "{@Tpaccept}" to {tpa.%player%}
+					send "{@Tpacceptteleporting}" to {tpa.%player%}
+					teleport {tpa.%player%} to player
+					wait 1 tick
+					delete {tpa.%player%}
+					stop
+				if {@Tpacooldownteleportuse} is true:
+					send "{@Tpaccept}" to player
+					send "{@Tpaccept}" to {tpa.%player%}
+					wait {@Tpacooldownteleportinseconds} seconds
+					teleport {tpa.%player%} to player
+					send "{@Tpacceptteleporting}" to {tpa.%player%}
+					wait 1 tick
+					delete {tpa.%player%}
+					stop
+			if {tpa.%player%} is not set:
+				send "{@Notpa}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /tpdeny:
+	permission: essentials.tpdeny
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/tpaccept
+	aliases: tpno, essentials:tpdeny, essentials:tpno
+	trigger:
+		if sender is a player:
+			if {tpa.%player%} is set:
+				send "{@Tpdeny}" to player
+				send "{@Tpdeny}" to {tpa.%player%}
+				delete {tpa.%player%}
+				stop
+			if {tpa.%player%} is not set:
+				send "{@Notpa}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /enchant [<enchantment type>]:
+	permission: essentials.enchant
+	executable by: players, console
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/enchant [enchantment type]
+	aliases: enchantment, essentials:enchantment, essentials:enchant
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/enchant [enchantment type]" to player
+				stop
+			if player's tool is air:
+				send "{@Enchanttoair}" to player
+				stop
+			if player's tool is not air:
+				enchant player's tool with arg 1
+				send "{@Enchant}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+#command /unlimited [<offline player>]:
+#	permission: essentials.unlimited
+#	permission message: {@Nopermission}
+#	usage: &cError &6>> &f/unlimited
+#	executable by: players, console
+#	aliases: ul, unl, essentials:unlimited, essentials:ul, essentials:unl
+#	trigger:
+#		if sender is a player:
+#			if arg 1 is not set:
+#				if {unlimited::%player%} is not set:
+#					set {unlimited::%player%} to 1
+#					send "{@Unlimitedenabletome}" to player
+#					stop
+#				if {unlimited::%player%} is set:
+#					clear {unlimited::%player%}
+#					send "{@Unlimiteddisabletome}" to player
+#					stop
+#			if arg 1 is online:
+#				if sender has permission "essentials.unlimited.others" or "essentials.*":
+#					if {unlimited::%player%} is not set:
+#						set {unlimited::%player%} to 1
+#						send "{@Unlimitedenabletome}" to arg 1
+#						send "{@Unlimitedenabletoplayeradmin}" to player
+#						stop
+#					if {unlimited::%player%} is set:
+#						clear {unlimited::%player%}
+#						send "{@Unlimiteddisabletome}" to arg 1
+#						send "{@Unlimiteddisabletoplayeradmin}" to player
+#						stop
+#				if sender doesn't have permission "essentials.unlimited.others" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#			if arg 1 is offline:
+#				send "{@Noplayerconnect}" to player
+#				stop
+#		if sender is console:
+#			send "{@Errortoconsoleisnotplayerusecommands}" to console
+#			stop
+
+#on place:
+#	if {unlimited::%player%} is set:
+#		give 0 of event-block to the player
+#		stop
+
+command /workbench:
+	permission: essentials.workbench
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/workbench
+	executable by: players, console
+	aliases: craft, wb, essentials:workbench, essentials:craft, essentials:wb
+	trigger:
+		if sender is a player:
+			open workbench inventory to the player
+			send "{@Workbench}" to player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /near:
+	permission: essentials.near
+	permission message: {@Nopermission}
+	aliases: essentials:near
+	executable by: players, console
+	usage: &cError &6>> &f/near
+	trigger:
+		if sender is a player:
+			loop players in radius 200 of player:
+				add 1 to {_n}
+				set {_players::%{_n}%} to loop-player
+				set {_locs::%{_n}%} to distance between loop-player and player
+			if {_n} is greater than 0:
+				loop {_players::*}:
+					add 1 to {_m}
+					remove player from {_players::*}
+					send "{@Near}" to player
+					stop
+			else:
+				send "{@Nearnoplayer}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+on join:
+    set {ip.%player%} to ip of player
+    stop
+
+on join:
+	delete {essentials.god.%player%}
+	stop
+
+on damage:
+	if {essentials.god.%victim%} is true:
+		cancel event
+		stop
+	if {essentials.god.%victim%} is false:
+		stop
+
+#command /pay [<offline player>] [<number>]:
+#	permission: essentials.pay
+#	permission message: {@Nopermission}
+#	aliases: essentials:pay
+#	executable by: players, console
+#	usage: &cError &6>> &f/pay [player] [number]
+#	trigger:
+#		if sender is a player:
+#			if arg 1 is not set:
+#				send "&cError &6>> /pay [player] [number]" to player
+#				stop
+#			if arg 1 is online:
+#				if arg 2 is set:
+#					if 0 is less than arg 2:
+#						send "{@Paynonumberpositive}" to player
+#						stop
+#					if {money.%UUID of player%} is less than arg 2:
+#						send "{@Paynomoney}" to player
+#						stop
+#					else:
+#						remove arg 2 from {money.%player%}
+#						add arg 2 to {money.%arg 1%}
+#						send "{@Paytome}" to player
+#						send "{@Paytoplayer}" to arg 1
+#						stop
+#				if arg 2 is not set:
+#					send "&cError &6>> /pay [player] [number]" to player
+#					stop
+#			if arg 1 is offline:
+#				send "{@Noplayerconnect}" to player
+#				stop
+#		if sender is console:
+#			send "{@Errortoconsoleisnotplayerusecommands}" to console
+#			stop
+
+on first join:
+	set {money.%UUID of player%} to 50
+	stop
+
+#command /money [<offline player>]:
+#	permission: essentials.money
+#	permission message: {@Nopermission}
+#	aliases: essentials:money, balance, bal, essentials:balance, essentials:bal
+#	executable by: players, console
+#	usage: &cError &6>> &f/money [player]
+#	trigger:
+#		if sender is a player:
+#			if arg 1 is not set:
+#				send "{@Moneytome}" to player
+#				stop
+#			if arg 1 is online:
+#				if sender has permission "essentials.money.others" or "essentials.*":
+#					send "{@Moneytoplayer}" to player
+#					stop
+#				if sender doesn't have permission "essentials.money.others" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#			if arg 1 is offline:
+#				if sender has permission "essentials.money.others" or "essentials.*":
+#					send "{@Moneytoplayer}" to player
+#					stop
+#				if sender doesn't have permission "essentials.money.others" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#		if sender is console:
+#			send "{@Errortoconsoleisnotplayerusecommands}" to console
+#			stop
+
+#command /eco [<text>] [<offline player>] [<number>]:
+#	permission: essentials.eco
+#	permission message: {@Nopermission}
+#	aliases: essentials:eco
+#	executable by: players, console
+#	usage: &cError &6>> &f/eco [give/remove/set] [player] [number]
+#	trigger:
+#		if sender is a player:
+#			if arg 1 is not set:
+#				send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#				stop
+#			if arg 1 is not "give" or "remove" or "set":
+#				send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#				stop
+#			if arg 1 is "set":
+#				if sender has permission "essentials.eco.*" or "essentials.eco.set" or "essentials.*":
+#					if arg 2 is not set:
+#						send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#						stop
+#					if arg 2 is online:
+#						if arg 3 is not set:
+#							send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#							stop
+#						if arg 3 is set:
+#							set {money.%arg 2%} to arg 3
+#							send "{@Ecosettoplayeradmin}" to player
+#							send "{@Ecosettome}" to arg 2
+#							stop
+#					if arg 2 is offline:
+#						send "{@Noplayerconnect}" to player
+#						stop
+#				if sender doesn't have permission "essentials.eco.*" or "essentials.eco.set" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#			if arg 1 is "give":
+#				if sender has permission "essentials.eco.*" or "essentials.eco.give" or "essentials.*":
+#					if arg 2 is not set:
+#						send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#						stop
+#					if arg 2 is online:
+#						if arg 3 is not set:
+#							send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#							stop
+#						if arg 3 is set:
+#							add arg 3 to {money.%arg 2%}
+#							send "{@Ecogivetoplayeradmin}" to player
+#							send "{@Ecogivetome}" to arg 2
+#					if arg 2 is offline:
+#						send "{@Noplayerconnect}" to player
+#						stop
+#				if sender doesn't have permission "essentials.eco.*" or "essentials.eco.give" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#			if arg 1 is "remove":
+#				if sender has permission "essentials.eco.*" or "essentials.eco.remove" or "essentials.*":
+#					if arg 2 is not set:
+#						send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#						stop
+#					if arg 2 is online:
+#						if arg 3 is not set:
+#							send "&cError &6>> &f/eco [give/remove/set] [player] [number]" to player
+#							stop
+#						if arg 3 is set:
+#							if {money.%arg 2%} > arg 3:
+#								remove arg 3 from {money.%arg 2%}
+#								send "{@Ecoremovetoplayeradmin}" to player
+#								send "{@Ecoremovetome}" to arg 2
+#							else:
+#								send "{@Ecoremovenomoneytome}" to player
+#								stop
+#				if sender doesn't have permission "essentials.eco.*" or "essentials.eco.remove" or "essentials.*":
+#					send "{@Nopermission}" to player
+#					stop
+#				if arg 2 is offline:
+#					send "{@Noplayerconnect}" to player
+#					stop
+#		if sender is console:
+#			send "{@Errortoconsoleisnotplayerusecommands}" to console
+#			stop
+
+on first join:
+	delete {essentials.god}
+	stop
+
+command /adminhome [<text>] [<offline player>] [<text>]:
+	permission: essentials.adminhome
+	permission message: {@Nopermission}
+	aliases: essentials:adminhome
+	executable by: players, console
+	usage: &cError &6>> &f/adminhome [delhome/reset/homes/home/sethome] [player] [home]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&fUsage: &6/adminhome delhome [player] [home]" to player
+				send "&fUsage: &6/adminhome reset [player]" to player
+				send "&fUsage: &6/adminhome homes [player]" to player
+				send "&fUsage: &6/adminhome home [player] [home]" to player
+				send "&fUsage: &6/adminhome sethome [player] [home]" to player
+				stop
+			if arg 1 is not "delhome" or "reset" or "home" or "homes" or "sethome":
+				send "&fUsage: &6/adminhome delhome [player] [home]" to player
+				send "&fUsage: &6/adminhome reset [player]" to player
+				send "&fUsage: &6/adminhome homes [player]" to player
+				send "&fUsage: &6/adminhome home [player] [home]" to player
+				send "&fUsage: &6/adminhome sethome [player] [home]" to player
+				stop
+			if arg 1 is "reset":
+				if arg 2 is not set:
+					send "&cError &6>> &f/adminhome delhome [player] [home]" to player
+					send "&cError &6>> &f/adminhome reset [player]" to player
+					send "&cError &6>> &f/adminhome homes [player]" to player
+					send "&cError &6>> &f/adminhome home [player] [home]" to player
+					send "&cError &6>> &f/adminhome sethome [player] [home]" to player
+					stop
+				if arg 2 is online:
+					delete {homename.%arg 2%::*}
+					delete {home.%arg 2%::*}
+					set {homes.%arg 2%} to 0
+					send "{@Adminhomereset}" to player
+					stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+			if arg 1 is "homes":
+				if arg 2 is not set:
+					send "&cError &6>> &f/adminhome delhome [player] [home]" to player
+					send "&cError &6>> &f/adminhome reset [player]" to player
+					send "&cError &6>> &f/adminhome homes [player]" to player
+					send "&cError &6>> &f/adminhome home [player] [home]" to player
+					send "&cError &6>> &f/adminhome sethome [player] [home]" to player
+					stop
+				if arg 2 is online:
+					send "{@Adminhomehome}" to player
+					stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+			if arg 1 is "home":
+				if arg 2 is not set:
+					send "&cError &6>> &f/adminhome remove [player] [home]" to player
+					send "&cError &6>> &f/adminhome reset [player]" to player
+					send "&cError &6>> &f/adminhome homes [player]" to player
+					send "&cError &6>> &f/adminhome home [player] [home]" to player
+					send "&cError &6>> &f/adminhome sethome [player] [home]" to player
+					stop
+				if arg 2 is online:
+					if arg 3 is set:
+						if {home.%arg 2%::%arg 3%} is set:
+							set {back::%uuid of player%} to location of player
+							teleport player to {home.%arg 2%::%arg 3%}
+							send "{@Adminhometeleporting}" to player
+							stop
+						if {home.%arg 2%::%arg 3%} is not set:
+							send "{@Adminhomenohome}" to player
+							stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+			if arg 1 is "delhome":
+				if arg 2 is not set:
+					send "&cError &6>> &f/adminhome delhome [player] [home]" to player
+					send "&cError &6>> &f/adminhome reset [player]" to player
+					send "&cError &6>> &f/adminhome homes [player]" to player
+					send "&cError &6>> &f/adminhome home [player] [home]" to player
+					send "&cError &6>> &f/adminhome sethome [player] [home]" to player
+					stop
+				if arg 2 is online:
+					if arg 3 is set:
+						if {home.%arg 2%::%arg 3%} is set:
+							remove arg 3 from {homename.%arg 2%::*}
+							remove arg 3 from {home.%arg 2%::*}
+							send "{@Adminhomedelhome}" to player
+							stop
+						if {home.%arg 2%::%arg 3%} is not set:
+							send "{@Adminhomenohome}" to player
+							stop
+			if arg 1 is "sethome":
+				if arg 2 is not set:
+					send "&cError &6>> &f/adminhome delhome [player] [home]" to player
+					send "&cError &6>> &f/adminhome reset [player]" to player
+					send "&cError &6>> &f/adminhome homes [player]" to player
+					send "&cError &6>> &f/adminhome home [player] [home]" to player
+					send "&cError &6>> &f/adminhome sethome [player] [home]" to player
+					stop
+				if arg 2 is online:
+					if arg 3 is set:
+						if {home.%arg 2%::%arg 3%} is not set:
+							add arg 3 to {homename.%arg 2%::*}
+							add arg 3 to {home.%arg 2%::*}
+							send "{@Adminhomesethome}" to player
+							stop
+						if {home.%arg 2%::%arg 3%} is set:
+							send "{@Adminhomealready}" to player
+							stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /delhome [<text>]:
+	permission: essentials.delhome
+	permission message: {@Nopermission}
+	aliases: essentials:delhome
+	executable by: players, console
+	usage: &cError &6>> &f/delhome [home]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/delhome [home]"
+				stop
+			if arg 1 is set:
+				if {home.%player%::%arg 1%} is set:
+					delete {home.%player%::%arg 1%}
+					delete {homename.%player%::%arg 1%} 
+					send "{@Homedelete}" to player
+					remove 1 from {homes.%player%}
+					stop
+				if {home.%player%::%arg 1%} is not set:
+					send "{@Nohome}" to player
+					stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /home [<text>]:
+	permission: essentials.home
+	permission message: {@Nopermission}
+	aliases: essentials:home
+	executable by: players, console
+	usage: &cError &6>> &f/home [home]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/home [home]" to player
+				stop
+			if arg 1 is set:
+				if {home.%player%::%arg 1%} is not set:
+					send "{@Nohome}" to player
+					stop
+				if {home.%player%::%arg 1%} is set:
+					if {@Homecooldownuse} is true:
+						if sender doesn't have permission "essentials.home.bypass" or "essentials.*":
+							send "{@Homecooldown1} {@Homecooldown} {@Homecooldown2}" to player
+							wait {@Homecooldown} seconds
+							send "{@Hometeleporting}" to player
+							set {back::%uuid of player%} to location of player
+							teleport player to {home.%player%::%arg 1%}
+							stop
+						if sender has permission "essentials.home.bypass" or "essentials.*":
+							send "{@Hometeleporting}" to player
+							set {back::%uuid of player%} to location of player
+							teleport player to {home.%player%::%arg 1%}
+							stop
+					if {@Homecooldownuse} is false:
+						set {back::%uuid of player%} to location of player
+						teleport player to {home.%player%::%arg 1%}
+						send "{@Hometeleporting}" to player
+						stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+
+command /homes:
+	permission: essentials.homes
+	permission message: {@Nopermission}
+	aliases: essentials:homes
+	executable by: players, console
+	usage: &cError &6>> &f/homes
+	trigger:
+		if sender is a player:
+			send "{@Homeslist}" to player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+on join:
+	set {nick.%player%} to player
+	stop
+
+on first join:
+	set {nick.%player%} to player
+	stop
+
+command /speed [<text>] [<number>]:
+	permission: essentials.speed
+	executable by: players, console
+	permission message: {@Nopermission}
+	aliases: essentials:speed
+	usage: &cError &6>> &f/speed [fly/walk/reset] [0/0.1/1]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/speed [fly/walk/reset] [0/0.1/1]" to player
+				stop
+			if arg 1 is not "fly" or "walk" or "reset":
+				send "&cError &6>> &f/speed [fly/walk/reset] [0/0.1/1]" to player
+				stop
+			if arg 1 is "fly":
+				if sender has permission "essentials.speed.fly" or "essentials.*":
+					if arg 2 is set:
+						set the player's fly speed to arg 2
+						send "{@Speedfly}" to player
+						stop
+					if arg 2 is not set:
+						send "&cError &6>> &f/speed [fly/walk/reset] [0/0.1/1]" to player
+						stop
+				if sender doesn't have permission "essentials.speed.fly" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is "walk":
+				if sender has permission "essentials.speed.walk" or "essentials.*":
+					if arg 2 is set:
+						set the player's walk speed to arg 2
+						send "{@Speedwalk}"
+						stop
+					if arg 2 is not set:
+						send "&cError &6>> &f/speed [fly/walk/reset] [0/0.1/1]" to player
+						stop
+				if sender doesn't have permission "essentials.speed.walk" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is "reset":
+				if sender has permission "essentials.speed.reset" or "essentials.*":
+					set the player's walk speed to 0.2
+					set the player's fly speed to 0.1
+					send "{@Speedreset}" to player
+					stop
+				if sender doesn't have permission "essentials.speed.reset" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+on quit:
+	set the player's walk speed to 0.2
+	set the player's fly speed to 0.1
+	stop
+
+command /day:
+	permission: essentials.day
+	permission message: {@Nopermission}
+	aliases: essentials:day
+	executable by: players, console
+	usage: &cError &6>> &f/day
+	trigger:
+		if sender is a player:
+			set time to 6:00
+			send "{@Day}" to player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /night:
+	permission: essentials.night
+	permission message: {@Nopermission}
+	aliases: essentials:night
+	executable by: players, console
+	usage: &cError &6>> &f/night
+	trigger:
+		if sender is a player:
+			set time to 20:00
+			send "{@Night}" to player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /enderchest [<offline player>]:
+	permission: essentials.enderchest
+	permission message: {@Nopermission}
+	aliases: essentials:enderchest, ec, essentials:ec
+	executable by: players, console
+	usage: &cError &6>> &f/enderchest [player]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				open player's ender chest to player
+				send "{@Enderchesttome}" to player
+				stop
+			if arg 1 is online:
+				if sender has permission "essentials.enderchest.others" or "essentials.*":
+					open the arg 1's ender chest for player
+					send "{@Enderchesttoplayer}" to player
+					stop
+				if sender doesn't have permission "essentials.enderchest.others" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /skull [<offline player>]:
+	permission: essentials.skull
+	permission message: {@Nopermission}
+	aliases: essentials:skull, head, playerhead, essentials:head, essentials:playerhead
+	executable by: players, console
+	usage: &cError &6>> &f/skull [name]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/skull [name]" to player
+				stop
+			if arg 1 is set:
+				give skull of arg 1 to player
+				send "{@Skull}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+command /warp [<text>]:
+	aliases: /warps
+	trigger:
+		if arg-1 is not set:
+			message "&7&m----------------------------"
+			message "&eWarp List"
+			message "&7&m----------------------------"
+			message "&7- &dCows"
+			message "&7- &dCrates"
+			message "&7- &dParkour"
+#			message "&7- &dCobble"
+			message "&7- &dPvP"
+			message "&7&m----------------------------"
+		else:
+			if arg-1 is "Cows":
+				send "&eWarping you to &dCows"
+				teleport player to location at 73, 123, 79 in world "world"
+			if arg-1 is "Crates":
+				send "&eWarping you to &dCrates"
+				teleport player to location at 30, 122, 134 in world "world"
+			if arg-1 is "Parkour":
+				send "&eWarping you to &dParkour"
+				teleport player to location at 34, 121, 112 in world "world"
+#			if arg-1 is "Cobble":
+#				send "&eWarping you to &dCobble Generator Example"
+#				teleport player to location at 102, 121, 125 in world "world"
+			if arg-1 is "PvP":
+				send "&eWarping you to warp &dPvP"
+				teleport player to location at 258, 120, 434 in world "world"
+
+command /msg <player> <text>:
+	aliases: /m, /pm, /pm, /dm, /tell
+	usage: "&cUsage: /message <player> <message>
+	trigger:
+		if argument 1 is set:
+			if argument 2 is set:
+				set {chat.private.reply.%player%} to arg 1
+				set {chat.private.reply.%arg 1%} to player
+				send "&7(To %colored arg-1's prefix%%arg-1%&7) %arg-2%" to player
+				send "&7(From %colored player's prefix%%player%&7) %arg-2%" to arg 1
+		else:
+			send "&cUsage: /message <player> <message>"
+command /reply <text>:	
+	aliases: /r
+	usage: "&cUsage: /r <text>
+	trigger:
+		if argument 1 is set:
+			send "&7(To %colored {chat.private.reply.%player%}'s prefix%%{chat.private.reply.%player%}%&7) %arg-1%" to player
+			send "&7(From %colored player's prefix%%player%&7) %arg-1%" to {chat.private.reply.%player%}
+		else:
+			send "&cUsage: /reply <message...>"
+command /r <text>:	
+	usage: "&cUsage: /r <text>
+	trigger:
+		if argument 1 is set:
+			send "&7(To %colored {chat.private.reply.%player%}'s prefix%%{chat.private.reply.%player%}%&7) %arg-1%" to player
+			send "&7(From %colored player's prefix%%player%&7) %arg-1%" to {chat.private.reply.%player%}
+		else:
+			send "&cUsage: /reply <message...>"
+
+command /tphere [<offline player>]:
+	permission: essentials.tphere
+	permission message: {@Nopermission}
+	aliases: essentials:tphere
+	executable by: players, console
+	usage: &cError &6>> &f/tphere [player]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cError &6>> &f/tphere [player]" to player
+				stop
+			if arg 1 is online:
+				set {back::%uuid of arg 1%} to location of arg 1
+				teleport arg 1 to player
+				send "{@Tphereteleporting}" to arg 1
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+
+command /gm [<text>] [<offline player>]:
+	permission: essentials.gamemode
+	executable by: players, console
+	permission message: {@Nopermission}
+	aliases: gamemode
+	usage: &cError &6>> &f/gamemode [0/1/2/3 or s/c/a/sp or survival/creative/adventure/spectator] [player]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cUsage: /gm <mode>" to player
+				stop
+			if arg 1 is not "1" or "2" or "3" or "0" or "c" or "a" or "sp" or "s" or "survival" or "creative" or "adventure" or "spectator":
+				send "&cUsage: /gm <mode>" to player
+				stop
+			if arg 2 is not set:
+				if sender has permission "essentials.gamemode.*" or "essentials.gamemode.creative" or "essentials.*":
+					if arg 1 is "1" or "c" or "creative":
+						set the gamemode of the player to creative
+						send "&6Gamemode has been updated to &fCREATIVE" to player
+						stop
+				if sender has permission "essentials.gamemode.*" or "essentials.gamemode.survival" or "essentials.*":
+					if arg 1 is "0" or "s" or "survival":
+						set the gamemode of the player to survival
+						send "&6Gamemode has been updated to &fSURVIVAL" to player
+						stop
+				if sender has permission "essentials.gamemode.*" or "essentials.gamemode.adventure" or "essentials.*":
+					if arg 1 is "2" or "a" or "adventure":
+						set the gamemode of the player to adventure
+						send "&6Gamemode has been updated to &fADVENTRUE" to player
+						stop
+				if sender has permission "essentials.gamemode.*" or "essentials.gamemode.spectator" or "essentials.*":
+					if arg 1 is "3" or "sp" or "spectator":
+						set the gamemode of the player to spectator
+						send "&6Gamemode has been updated to &fSPECTATOR" to player
+						stop
+				if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.creative" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+				if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.survival" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+				if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.adventure" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+				if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.spectator" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is set:
+				if arg 2 is online:
+					if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.creative.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+					if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.survival.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+					if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.adventure.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+					if sender doesn't have permission "essentials.gamemode.*" or "essentials.gamemode.spectator.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+					if sender has permission "essentials.gamemode.*" or "essentials.gamemode.creative.others" or "essentials.*":
+						if arg 1 is "1" or "c" or "creative":
+							set the gamemode of the arg 2 to creative
+							send "{@Gamemodetoplayertocreative}" to arg 2
+							send "{@Gamemodetoplayeradmintocreative}" to player
+							stop
+					if sender has permission "essentials.gamemode.*" or "essentials.gamemode.survival.others" or "essentials.*":
+						if arg 1 is "0" or "s" or "survival":
+							set the gamemode of the arg 2 to survival
+							send "{@Gamemodetoplayertosurvival}" to arg 2
+							send "{@Gamemodetoplayeradmintosurvival}" to player
+							stop
+					if sender has permission "essentials.gamemode.*" or "essentials.gamemode.adventure.others" or "essentials.*":
+						if arg 1 is "2" or "a" or "adventure":
+							set the gamemode of the arg 2 to adventure
+							send "{@Gamemodetoplayertoadventure}" to arg 2
+							send "{@Gamemodetoplayeradmintoadventure}" to player
+							stop
+					if sender has permission "essentials.gamemode.*" or "essentials.gamemode.spectator.others" or "essentials.*":
+						if arg 1 is "3" or "sp" or "spectator":
+							set the gamemode of the arg 2 to spectator
+							send "{@Gamemodetoplayertospectator}" to arg 2
+							send "{@Gamemodetoplayeradmintospectator}" to player
+							stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to player
+					stop		
+		if sender is console:
+			if arg 1 is not set:
+				send "&cError &6>> &f/gamemode [0/1/2/3 or s/c/a/sp or survival/creative/adventure/spectator] [player]" to console
+				stop
+			if arg 1 is not "1" or "2" or "3" or "0" or "c" or "a" or "sp" or "s" or "survival" or "creative" or "adventure" or "spectator":
+				send "&cError &6>> &f/gamemode [0/1/2/3 or s/c/a/sp or survival/creative/adventure/spectator] [player]" to console
+				stop
+			if arg 1 is set:
+				if arg 2 is not set:
+					send "&cError &6>> &f/gamemode [0/1/2/3 or s/c/a/sp or survival/creative/adventure/spectator] [player]" to console
+					stop
+				if arg 2 is online:
+					if arg 1 is "1" or "c" or "creative":
+						set the gamemode of the arg 2 to creative
+						send "{@Gamemodetoplayerisconsoletocreative}" to arg 2
+						send "{@Gamemodetoplayeradmintocreative}" to console
+						stop
+					if arg 1 is "0" or "s" or "survival":
+						set the gamemode of the arg 2 to survival
+						send "{@Gamemodetoplayerisconsoletosurvival}" to arg 2
+						send "{@Gamemodetoplayeradmintosurvival}" to console
+						stop
+					if arg 1 is "2" or "a" or "adventure":
+						set the gamemode of the arg 2 to adventure
+						send "{@Gamemodetoplayerisconsoletoadventure}" to arg 2
+						send "{@Gamemodetoplayeradmintoadventure}" to console
+						stop
+					if arg 1 is "3" or "sp" or "spectator":
+						set the gamemode of the arg 2 to spectator
+						send "{@Gamemodetoplayerisconsoletospectator}" to arg 2
+						send "{@Gamemodetoplayeradmintospectator}" to console
+						stop
+				if arg 2 is offline:
+					send "{@Noplayerconnect}" to console
+					stop
+
+command /fly [<offline player>]:
+	permission: essentials.fly
+	permission message: {@Nopermission}
+	executable by: players, console
+	aliases: essentials:fly
+	usage: &cError &6>> &f/fly [player]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				if {fly.%player%} is not set:
+					send "&6Fly has been updated to &fTRUE" to player
+					set player's flight mode to true
+					set {fly.%player%} to true
+					stop
+				if {fly.%player%} is set:
+					send "&6Fly has been updated to &fFALSE" to player
+					set player's flight mode to false
+					delete {fly.%player%}
+					stop
+			if arg 1 is online:
+				if sender has permission "essentials.fly.others" or "essentials.*":
+					if {fly.%arg 1%} is not set:
+						send "{@Flytoplayerisadmin}" to player
+						send "{@Flytoplayer}" to arg 1
+						set arg 1's flight mode to true
+						set {fly.%arg 1%} to true
+						stop
+					if {fly.%arg 1%} is set:
+						send "{@Noflytoplayerisadmin}" to player
+						send "{@Noflytoplayer}" to arg 1
+						set arg 1's flight mode to false
+						delete {fly.%arg 1%}
+						stop
+				if sender doesn't have permission "essentials.fly.others" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+			if arg 1 is offline:
+				if sender has permission "essentials.fly.others" or "essentials.*":
+					send "{@Noplayerconnect}" to player
+					stop
+				if sender doesn't have permission "essentials.fly.others" or "essentials.*":
+					send "{@Nopermission}" to player
+					stop
+		if sender is console:
+			if arg 1 is online:
+				if {fly.%arg 1%} is not set:
+					send "{@Flytoplayerisadmin}" to console
+					send "{@Flytoplayerisconsole}" to arg 1
+					set arg 1's flight mode to true
+					set {fly.%arg 1%} to true
+					stop
+				if {fly.%arg 1%} is set:
+					send "{@Noflytoplayerisadmin}" to console
+					send "{@Noflytoplayerisconsole}" to arg 1
+					set arg 1's flight mode to false
+					delete {fly.%arg 1%}
+					stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/fly [player]" to console
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to console
+				stop
+on respawn:
+	if {@Teleportspawntodeath} is true:
+		teleport player to {spawn}
+		stop
+	if {@Teleportspawntodeath} is false:
+		stop
+
+command /tpall:
+	permission: essentials.tpall
+	permission message: {@Nopermission}
+	aliases: essentials:tpall
+	executable by: players, console
+	usage: &6Usage: &f/tpall
+	trigger:
+		if sender is a player:
+			loop all players:
+				send "{@Tpallteleporting}" to loop-player
+				teleport all players to player
+				send "{@Tpallteleportingisadmin}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /clearinventory [<offline player>]:
+	permission: essentials.clearinventory
+	permission message: {@Nopermission}
+	executable by: players, console
+	aliases: essentials:clearinventory, ci, clear, essentials:clear, essentials:ci
+	usage: &cError &6>> &f/clear [player]
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				clear player's inventory
+				send "{@Cleartome}" to player
+				stop
+			if arg 1 is online:
+				if sender has permission "essentials.clearinventory.others" or "essentials.*":
+					clear argument's inventory
+					send "{@Cleartoplayerisadmin}" to arg 1
+					send "{@Cleartoplayer}" to player
+					stop
+				if sender doesn't have permission "essentials.clearinventory.others" or "essentials.*":
+					send "{@Nopermission}" to player
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop
+		if sender is console:
+			if arg 1 is online:
+				clear argument's inventory
+				send "{@Cleartoplayerisconsole}" to arg 1
+				send "{@Cleartoplayer}" to console
+				stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/clear [player]" to console
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to console
+				stop
+
+command /broadcast [<text>]:
+	permission: essentials.broadcast
+	permission message: {@Nopermission}
+	aliases: bc
+	usage: &cError &6>> &f/broadcast [text]
+	executable by: players, console
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cUsage: /broadcast <message>"
+				stop
+			if arg 1 is set:
+				broadcast "&7[%colored player's prefix%%player%&7] &f{@Broadcast}"
+				stop
+		if sender is console:
+			if arg 1 is set:
+				broadcast "&7[&4Console&7] &f{@Broadcastcolor}"
+				stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/broadcast [text]" to console
+				stop
+command /broadcast [<text>]:
+	permission: essentials.broadcast
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/broadcast [text]
+	executable by: players, console
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cUsage: /broadcast <message>"
+				stop
+			if arg 1 is set:
+				broadcast "&7[%colored player's prefix%%player%&7] &f{@Broadcast}"
+				stop
+		if sender is console:
+			if arg 1 is set:
+				broadcast "&7[&4Console&7] &f{@Broadcastcolor}"
+				stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/broadcast [text]" to console
+				stop
+command /bc [<text>]:
+	permission: essentials.broadcast
+	permission message: {@Nopermission}
+	usage: &cError &6>> &f/broadcast [text]
+	executable by: players, console
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cUsage: /bc <message>"
+				stop
+			if arg 1 is set:
+				broadcast "&7[&6&lBroadcast&7] &f{@Broadcast}"
+				stop
+		if sender is console:
+			if arg 1 is set:
+				broadcast "&c[&4Console&c] &f{@Broadcastcolor}"
+				stop
+			if arg 1 is not set:
+				send "&cError &6>> &f/broadcast [text]" to console
+				stop
+
+
+command /tp [<offline player>]:
+	permission: basic.tp
+	permission message: {@Nopermission}
+	aliases: essentials:tp
+	executable by: players, console
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "&cUsage: /tp <player>"
+				stop
+			if arg 1 is online:
+				set {back::%uuid of player%} to location of player
+				teleport player to arg 1
+				send "&6Teleporting you to %colored arg-1's prefix%%arg-1%" to player
+				stop
+			if arg 1 is offline:
+				send "&cPlayer %arg-1% could not be found!" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+on first join:
+	if {@Teleportspawntojoin} is true:
+		teleport player to {spawn}
+		stop
+	if {@Teleportspawntojoin} is false:
+		stop
+
+on join: 
+	if {@Teleportspawntojoin} is false:
+		teleport player to {spawn}
+		stop
+	if {@Teleportspawntojoin} is true:
+		stop
+
+on build:
+	if player has permission "essentials.build" or "essentials.*":
+		stop
+	if player doesn't have permission "essentials.build" or "essentials.*":
+		cancel event
+		send "{@Nobuild}" to player
+		stop
+
+on break:
+	if player has permission "essentials.build" or "essentials.*":
+		stop
+	if player doesn't have permission "essentials.build" or "essentials.*":
+		cancel event
+		send "{@Nobuild}" to player
+		stop
+
+command /feed [<offline player>]:
+	permission: essentials.feed
+	aliases: essentials:feed
+	usage: &cError &6>> &f/feed [player]
+	permission message: {@Nopermission}
+	executable by: players, console
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "{@Feedtome}" to player
+				set hunger bar to 10
+				stop
+			if arg 1 is online:
+				if sender is a players:
+					if sender has permission "essentials.feed.others" or "essentials.*":
+						send "{@Feedtoplayerisadmin}" to player
+						send "{@Feedtoplayer}" to arg 1
+						set arg's food bar to 10
+						stop
+					if sender doesn't have permission "essentials.feed.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+				if arg 1 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+		if sender is console:
+			if arg 1 is not set:
+				send "{@Noplayerconnect}" to console
+				stop
+			if arg 1 is online:
+				send "{@Feedtoplayerconsole}" to arg 1
+				set arg's food bar to 10
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to console
+				stop
+
+command /heal [<offline player>]:
+	permission: essentials.heal
+	usage: &cError &6>> &f/heal [player]
+	aliases: essentials:heal
+	executable by: players, console
+	permission message: {@Nopermission}
+	trigger:
+		if sender is a player:
+			if arg 1 is not set:
+				send "{@Healtome}" to player
+				heal player
+				stop
+			if arg 1 is online:
+				if sender is a players:
+					if sender has permission "essentials.heal.others" or "essentials.*":
+						send "{@Healtoplayerisadmin}" to player
+						send "{@Healtoplayer}" to arg 1
+						heal arg 1
+						stop
+					if sender doesn't have permission "essentials.heal.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to player
+				stop
+		if sender is console:
+			if arg 1 is not set:
+				send "{@Noplayerconnect}" to console
+				stop
+			if arg 1 is online:
+				send "{@Healtoplayerconsole}" to arg 1
+				heal arg 1
+				stop
+			if arg 1 is offline:
+				send "{@Noplayerconnect}" to console
+				stop
+
+command /setspawn:
+	aliases: essentials:setspawn
+	permission: essentials.setspawn
+	usage: &cError &6>> &f/setspawn
+	executable by: players, console
+	permission message: {@Nopermission}
+	trigger:
+		if sender is a player:
+			send "{@Setspawn}" to player
+			set {spawn} to location of player
+			stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop
+
+command /spawn [<offline player>]:
+	aliases: essentials:spawn
+	executable by: players, console
+	usage: &cError &6>> &f/spawn [player]
+	permission: essentials.spawn
+	permission message: {@Nopermission}
+	trigger:
+		if sender is a player:
+			if {spawn} is not set:
+				send "{@Nospawnpoint}" to player
+				stop
+			if {spawn} is set:
+				if arg 1 is not set:
+					if {@Spawncooldownuse} is true:
+						if sender doesn't have permission "essentials.spawn.bypass" or "essentials.*":
+							send "{@Spawncooldown1} {@Spawncooldown} {@Spawncooldown2}" to player
+							wait {@Spawncooldown} seconds
+							set {back::%uuid of player%} to location of player
+							teleport player to {spawn}
+							send "{@Spawnteleporting}" to player
+							stop
+						if sender has permission "essentials.spawn.bypass" or "essentials.*":
+							set {back::%uuid of player%} to location of player
+							teleport player to {spawn}
+							send "{@Spawnteleporting}" to player
+							stop
+					if {@Spawncooldownuse} is false:
+						set {back::%uuid of player%} to location of player
+						teleport player to {spawn}
+						send "{@Spawnteleporting}" to player
+						stop
+				if arg 1 is online:
+					if sender has permission "essentials.spawn.others" or "essentials.*":
+						if arg 1 is offline:
+							send "{@Noplayerconnect}" to player
+							stop
+						if arg 1 is online:
+							send "{@Teleportspawnisplayer}" to arg 1
+							set {back::%uuid of arg 1%} to location of arg 1
+							send "{@Spawnteleporting}" to arg 1
+							teleport arg 1 to {spawn}
+							stop
+					if sender doesn't have permission "essentials.spawn.others" or "essentials.*":
+						send "{@Nopermission}" to player
+						stop
+				if arg 1 is offline:
+					send "{@Noplayerconnect}" to player
+					stop
+		if sender is console:
+			if {spawn} is not set:
+				send "{@Nospawnpoint}" to console
+				stop
+			if {spawn} is set:
+				if arg 1 is not set:
+					if {@Spawncooldownuse} is true:
+						send "{@Errortoconsoleisnotplayerusecommands}" to console
+						stop
+				if arg 1 is online:
+					if arg 1 is offline:
+						send "{@Noplayerconnect}" to console
+						stop
+					if arg 1 is online:
+						send "{@Teleportspawnisplayer}" to arg 1
+						set {back::%uuid of arg 1%} to location of arg 1
+						send "{@Spawnteleporting}" to arg 1
+						teleport arg 1 to {spawn}
+						stop
+				if arg 1 is offline:
+					send "{@Noplayerconnect}" to console
+					stop
+
+command /delspawn:
+	permission: essentials.delspawn
+	aliases: essentials:delspawn
+	usage: &cError &6>> &f/delspawn
+	executable by: players, console
+	permission message: {@Nopermission}
+	trigger:
+		if sender is a player:
+			if {spawn} is set:
+				delete {spawn}
+				send "{@Deletespawn}" to player
+				stop
+			if {spawn} is not set:
+				send "{@Nospawnpoint}" to player
+				stop
+		if sender is console:
+			send "{@Errortoconsoleisnotplayerusecommands}" to console
+			stop

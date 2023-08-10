@@ -1,0 +1,33 @@
+Options:
+	prefix: &8[&cSTAFF&8]
+
+on unload:
+	clear {sctoggle::*}
+
+on chat:
+	if {sctoggle::%uuid of player%} is true:
+		if player has the permission "staffchat.use":
+			cancel event
+			staffChat(player, message)
+		else:
+			clear {sctoggle::%uuid of player%}
+
+command /sc [<text>]:
+	description: Private staff chat.
+	permission: staffchat.use
+	permission message: &cInsufficient permission.
+	aliases: /staffchat
+	trigger:
+		if arg-1 is not set:
+			if {sctoggle::%uuid of player%} is not set:
+				set {sctoggle::%uuid of player%} to true
+				send "&aStaff chat is now enabled."
+			else:
+				clear {sctoggle::%uuid of player%}
+				send "&cStaff chat is now disabled."
+				send "&7&oYou can still talk in staffchat using /sc <message>"
+		else:
+			staffChat(player, arg-1)
+
+function staffChat(p: player, m: text):
+	send "{@prefix} &c%{_p}% &8» &r%{_m}%" to all players where [input has permission "staffchat.use"]

@@ -1,0 +1,62 @@
+#Statistic's is a Skript made by Byteware to show your stats in game.
+
+#Created by Btyeware
+
+variables:
+	kills.%player% = 0
+	deaths.%player% = 0
+	blocks.%player% = 0
+	blocksplace.%player% = 0
+	gapples.%player% = 0
+	status.%player% = "&cOffline"
+
+	
+on death:
+	attacker is a player
+	victim is a player
+	increase {kills.%attacker%} by 1
+	increase {deaths.%victim%} by 1
+
+on break:
+	increase {blocks.%player%} by 1
+	
+on place:
+	increase {blocksplace.%player%} by 1
+	
+on join:
+	set {status.%player%} to "&aOnline"
+	if {kills.%player%} is not set:
+		set {kills.%player%} to 0
+	if {deaths.%player%} is not set:
+		set {deaths.%player%} to 0
+	
+on quit:
+	set {status.%player%} to "&cOffline"
+	
+
+command /stats [<offlineplayer>]:
+	trigger:
+		if arg 1 is not set:
+			send "&7&m--------------------------------------------"
+			send "%colored player's prefix%%player%&E's SkyBlock Stats"
+			send "&7"
+			send "&eStatus&7: &b%{status.%player%}%"
+			send "&eKills&7: &b%{kills.%player%}%"
+			send "&eDeaths&7: &b%{deaths.%player%}%"
+			send "&eBlocks Mined&7: &b%{blocks.%player%}%"
+			send "&eBlocks Placed&7: &b%{blocksplace.%player%}%"
+			send "&7"
+			send "&eDuels Won&7: &b0"
+			send "&eReputation&7: &b%{elo::%player%}%RP"
+			send "&7&m--------------------------------------------"
+		if arg 1 is set:
+			send "&7&m--------------------------------------------"
+			send "%colored arg-1's prefix%%arg-1%&E's SkyBlock Stats"
+			send "&7"
+			send "&eStatus&7: &b%{status.%arg-1%}%"
+			send "&eBlocks Mined&7: &b%{blocks.%arg-1%}%"
+			send "&eBlocks Placed&7: &b%{blocksplace.%arg-1%}%"
+			send "&7"
+			send "&eDuels Won&7: &b0"
+			send "&eReputation&7: &b%{elo::%arg-1%}%RP"
+			send "&7&m--------------------------------------------"	
